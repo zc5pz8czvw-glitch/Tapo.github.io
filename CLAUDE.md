@@ -2,6 +2,16 @@
 
 Reguli de utilizare pentru Claude în acest repository.
 
+## Reguli principale
+
+Aceste reguli au prioritate față de toate celelalte.
+
+1. Nu șterge nimic fără permisiunea mea.
+2. Vorbește cu mine în limba română, cu un limbaj simplu.
+3. Înainte să începi ceva, arată-mi ce vrei să faci.
+4. După fiecare lucru creat, explică-mi pe scurt ce ai făcut.
+5. Dacă nu ești sigur, întreabă-mă. Nu inventa.
+
 ## Despre proiect
 
 - `Tapo.github.io` este un site static găzduit pe **GitHub Pages**.
