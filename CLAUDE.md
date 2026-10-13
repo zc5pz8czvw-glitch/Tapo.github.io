@@ -12,6 +12,24 @@ Aceste reguli au prioritate față de toate celelalte.
 4. După fiecare lucru creat, explică-mi pe scurt ce ai făcut.
 5. Dacă nu ești sigur, întreabă-mă. Nu inventa.
 
+## Despre utilizator
+
+- Numele: Gabs.
+- Lucrează de pe telefon. Nu se pricepe la calculatoare, dar se pricepe la telefoane.
+- Explicațiile se dau scurt și clar. Detalii doar când le cere.
+- Scopul: să facă bani online. Site-ul poate deveni un business, dar planul nu e încă clar. Propune idei, dar întreabă înainte să alegi o direcție.
+- Vizitatorii site-ului: încă nestabiliți.
+
+## Stilul preferat
+
+- Aspect foarte profesional și bine organizat.
+- Animații plăcute.
+- Culorile se aleg după scopul site-ului, ținând cont de ce transmite fiecare culoare.
+
+## Livrare
+
+- Când ceva e gata, trimite-i și fișierul în aplicație, ca să-l poată salva pe telefon.
+
 ## Despre proiect
 
 - `Tapo.github.io` este un site static găzduit pe **GitHub Pages**.
