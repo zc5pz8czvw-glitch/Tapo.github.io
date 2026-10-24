@@ -1,0 +1,487 @@
+[
+ [
+  "Poți alege cel mult {0} zile libere pe săptămână.",
+  "You can pick at most {0} rest days per week.",
+  "Можно выбрать не больше {0} выходных в неделю."
+ ],
+ [
+  "E-mailul sau parola nu sunt corecte.",
+  "The email or password is incorrect.",
+  "Неверный e-mail или пароль."
+ ],
+ [
+  "Adresa de e-mail nu este confirmată încă. Introdu codul primit pe e-mail.",
+  "Your email address isn't confirmed yet. Enter the code you got by email.",
+  "Твой e-mail ещё не подтверждён. Введи код, который пришёл на почту."
+ ],
+ [
+  "Există deja un cont cu acest e-mail. Autentifică-te sau resetează parola.",
+  "An account with this email already exists. Sign in or reset your password.",
+  "Аккаунт с этим e-mail уже существует. Войди или сбрось пароль."
+ ],
+ [
+  "Parola este prea slabă: folosește cel puțin 8 caractere, cu litere și cifre.",
+  "The password is too weak: use at least 8 characters, with letters and digits.",
+  "Пароль слишком слабый: используй минимум 8 символов, буквы и цифры."
+ ],
+ [
+  "Ai cerut prea multe e-mailuri. Așteaptă un minut și încearcă din nou.",
+  "You've requested too many emails. Wait a minute and try again.",
+  "Ты запросил слишком много писем. Подожди минуту и попробуй снова."
+ ],
+ [
+  "Prea multe încercări. Așteaptă puțin și încearcă din nou.",
+  "Too many attempts. Wait a bit and try again.",
+  "Слишком много попыток. Подожди немного и попробуй снова."
+ ],
+ [
+  "Codul este greșit sau a expirat. Verifică e-mailul sau cere un cod nou.",
+  "The code is wrong or has expired. Check your email or request a new code.",
+  "Код неверный или устарел. Проверь почту или запроси новый код."
+ ],
+ [
+  "Verifică adresa de e-mail și parola.",
+  "Check your email address and password.",
+  "Проверь e-mail и пароль."
+ ],
+ [
+  "Adresa de e-mail nu este validă.",
+  "The email address isn't valid.",
+  "Некорректный e-mail."
+ ],
+ [
+  "Înregistrările sunt oprite temporar.",
+  "Sign-ups are temporarily paused.",
+  "Регистрация временно приостановлена."
+ ],
+ [
+  "Sesiunea a expirat. Autentifică-te din nou.",
+  "Your session has expired. Sign in again.",
+  "Сессия истекла. Войди снова."
+ ],
+ [
+  "Parola nouă trebuie să fie diferită de cea veche.",
+  "The new password must be different from the old one.",
+  "Новый пароль должен отличаться от старого."
+ ],
+ [
+  "Nu ai conexiune la internet. Încearcă din nou când ești online.",
+  "You're offline. Try again when you're back online.",
+  "Нет подключения к интернету. Попробуй снова, когда будешь онлайн."
+ ],
+ [
+  "Serverul nu răspunde acum. Progresul tău e în siguranță pe acest dispozitiv; încearcă mai târziu.",
+  "The server isn't responding right now. Your progress is safe on this device; try again later.",
+  "Сервер сейчас не отвечает. Твой прогресс в безопасности на этом устройстве; попробуй позже."
+ ],
+ [
+  "Conturile nu sunt disponibile în această versiune a aplicației.",
+  "Accounts aren't available in this version of the app.",
+  "Аккаунты недоступны в этой версии приложения."
+ ],
+ [
+  "Bearer {0}",
+  "Bearer {0}",
+  "Bearer {0}"
+ ],
+ [
+  "(display-mode: standalone)",
+  "(display-mode: standalone)",
+  "(display-mode: standalone)"
+ ],
+ [
+  "Ai anulat salvarea. Nu s-a salvat nimic.",
+  "You canceled the save. Nothing was saved.",
+  "Ты отменил сохранение. Ничего не сохранено."
+ ],
+ [
+  "Salvarea fișierului nu este disponibilă aici. Folosește „Copiază” și păstrează textul într-un loc sigur.",
+  "Saving files isn't available here. Use “Copy” and keep the text somewhere safe.",
+  "Сохранение файла здесь недоступно. Используй «Копировать» и сохрани текст в надёжном месте."
+ ],
+ [
+  "Descărcarea nu a reușit. Folosește „Copiază”.",
+  "The download failed. Use “Copy”.",
+  "Не удалось скачать. Используй «Копировать»."
+ ],
+ [
+  "Fără conexiune: modificările se salvează în cont când revine internetul.",
+  "Offline: changes will be saved to your account when the internet is back.",
+  "Нет подключения: изменения сохранятся в аккаунте, когда вернётся интернет."
+ ],
+ [
+  "Serverul nu răspunde momentan. Datele sunt în siguranță local; reîncerc automat.",
+  "The server isn't responding right now. Your data is safe locally; I'll retry automatically.",
+  "Сервер сейчас не отвечает. Данные в безопасности локально; повторю попытку автоматически."
+ ],
+ [
+  "Sesiunea a expirat. Autentifică-te din nou ca să reiei salvarea în cont.",
+  "Your session has expired. Sign in again to resume saving to your account.",
+  "Сессия истекла. Войди снова, чтобы продолжить сохранение в аккаунте."
+ ],
+ [
+  "Progresul este prea mare pentru salvarea în cont. Datele rămân salvate local; fă o copie de siguranță.",
+  "Your progress is too large for account saving. Your data stays saved locally; make a backup.",
+  "Прогресс слишком большой для сохранения в аккаунте. Данные остаются сохранёнными локально; сделай резервную копию."
+ ],
+ [
+  "Contul este suspendat. Datele rămân pe acest dispozitiv; scrie-ne pentru detalii.",
+  "Your account is suspended. Your data stays on this device; write to us for details.",
+  "Аккаунт заблокирован. Данные остаются на этом устройстве; напиши нам, чтобы узнать подробности."
+ ],
+ [
+  "Prea multe salvări într-un timp scurt. Reîncerc imediat.",
+  "Too many saves in a short time. Retrying shortly.",
+  "Слишком много сохранений за короткое время. Скоро повторю попытку."
+ ],
+ [
+  "Copia din cont a fost modificată de alt dispozitiv.",
+  "The copy in your account was changed by another device.",
+  "Копию в аккаунте изменило другое устройство."
+ ],
+ [
+  "Joacă LIFE RPG cu mine! Adaugă-mă ca prieten (Progres → Clasament → Adaugă un prieten) cu codul: {0}{1}",
+  "Play LIFE RPG with me! Add me as a friend (Progress → Leaderboard → Add a friend) with the code: {0}{1}",
+  "Играй в LIFE RPG со мной! Добавь меня в друзья (Прогресс → Рейтинг → Добавить друга) по коду: {0}{1}"
+ ],
+ [
+  "Joacă LIFE RPG cu mine! Adaugă-mă în clasament (Progres → Clasament → Adaugă un prieten) cu codul meu:\n{0}{1}",
+  "Play LIFE RPG with me! Add me to your leaderboard (Progress → Leaderboard → Add a friend) with my code:\n{0}{1}",
+  "Играй в LIFE RPG со мной! Добавь меня в рейтинг (Прогресс → Рейтинг → Добавить друга) по моему коду:\n{0}{1}"
+ ],
+ [
+  "Codul de prieten are 8 caractere (litere și cifre), de exemplu K7P2-QX9M.",
+  "A friend code has 8 characters (letters and digits), for example K7P2-QX9M.",
+  "Код друга состоит из 8 символов (буквы и цифры), например K7P2-QX9M."
+ ],
+ [
+  "Nu am găsit niciun jucător cu acest cod. Verifică-l și încearcă din nou.",
+  "No player found with this code. Check it and try again.",
+  "Игрок с таким кодом не найден. Проверь код и попробуй снова."
+ ],
+ [
+  "Poți avea cel mult 100 de prieteni.",
+  "You can have at most 100 friends.",
+  "У тебя может быть не больше 100 друзей."
+ ],
+ [
+  "Ai adăugat mulți prieteni azi. Încearcă din nou mâine.",
+  "You've added a lot of friends today. Try again tomorrow.",
+  "Ты сегодня добавил много друзей. Попробуй снова завтра."
+ ],
+ [
+  "Nu ai conexiune la internet.",
+  "You're offline.",
+  "Нет подключения к интернету."
+ ],
+ [
+  "Serverul nu răspunde acum. Încearcă din nou peste puțin timp.",
+  "The server isn't responding right now. Try again in a little while.",
+  "Сервер сейчас не отвечает. Попробуй снова чуть позже."
+ ],
+ [
+  "Autentifică-te din nou ca să adaugi prieteni.",
+  "Sign in again to add friends.",
+  "Войди снова, чтобы добавлять друзей."
+ ],
+ [
+  "Ai trimis multe raportări azi. Încearcă mâine.",
+  "You've sent a lot of reports today. Try tomorrow.",
+  "Ты сегодня отправил много жалоб. Попробуй завтра."
+ ],
+ [
+  "Pentru Mentorul AI ai nevoie de un cont (gratuit). Până atunci răspunde mentorul local.",
+  "You need a (free) account for the AI Mentor. Until then, the local mentor answers.",
+  "Для ИИ-наставника нужен аккаунт (бесплатный). А пока отвечает локальный наставник."
+ ],
+ [
+  "Confirmă adresa de e-mail (codul primit) ca să folosești Mentorul AI. Am răspuns local.",
+  "Confirm your email address (with the code you received) to use the AI Mentor. I answered locally.",
+  "Подтверди e-mail (кодом из письма), чтобы пользоваться ИИ-наставником. Я ответил локально."
+ ],
+ [
+  "Ca să folosești AI, trebuie să fii de acord cu trimiterea unui rezumat al datelor tale. Am răspuns local.",
+  "To use AI, you need to agree to sending a summary of your data. I answered locally.",
+  "Чтобы пользоваться ИИ, нужно согласиться на отправку сводки твоих данных. Я ответил локально."
+ ],
+ [
+  "Mentorul AI nu este activat pe server momentan. Am răspuns local.",
+  "The AI Mentor isn't enabled on the server right now. I answered locally.",
+  "ИИ-наставник сейчас не включён на сервере. Я ответил локально."
+ ],
+ [
+  "Contul tău nu poate folosi AI. Am răspuns local.",
+  "Your account can't use AI. I answered locally.",
+  "Твой аккаунт не может пользоваться ИИ. Я ответил локально."
+ ],
+ [
+  "Ai folosit toate mesajele AI pentru azi. Mâine primești altele; până atunci răspunde mentorul local.",
+  "You've used all your AI messages for today. You'll get more tomorrow; until then, the local mentor answers.",
+  "Ты использовал все сообщения ИИ на сегодня. Завтра будут новые; а пока отвечает локальный наставник."
+ ],
+ [
+  "Mentorul AI este foarte solicitat azi și a atins limita zilnică a serverului. Am răspuns local; revino mâine.",
+  "The AI Mentor is in high demand today and has hit the server's daily limit. I answered locally; come back tomorrow.",
+  "ИИ-наставник сегодня очень востребован и достиг дневного лимита сервера. Я ответил локально; возвращайся завтра."
+ ],
+ [
+  "Prea multe mesaje într-un minut. Am răspuns local; încearcă AI din nou peste puțin timp.",
+  "Too many messages in one minute. I answered locally; try AI again in a little while.",
+  "Слишком много сообщений за минуту. Я ответил локально; попробуй ИИ снова чуть позже."
+ ],
+ [
+  "Mentorul AI încă lucrează la cererea anterioară. Am răspuns local.",
+  "The AI Mentor is still working on your previous request. I answered locally.",
+  "ИИ-наставник ещё работает над предыдущим запросом. Я ответил локально."
+ ],
+ [
+  "Serviciul AI este supraîncărcat acum. Am răspuns local; poți reîncerca peste un minut.",
+  "The AI service is overloaded right now. I answered locally; you can retry in a minute.",
+  "Сервис ИИ сейчас перегружен. Я ответил локально; можешь повторить через минуту."
+ ],
+ [
+  "Serviciul AI a răspuns prea greu. Am răspuns local; poți reîncerca.",
+  "The AI service took too long to respond. I answered locally; you can retry.",
+  "Сервис ИИ отвечал слишком долго. Я ответил локально; можешь повторить."
+ ],
+ [
+  "Nu ai conexiune la internet: am răspuns local, fără AI.",
+  "You're offline: I answered locally, without AI.",
+  "Нет подключения к интернету: я ответил локально, без ИИ."
+ ],
+ [
+  "Serverul nu răspunde acum. Am răspuns local; poți reîncerca.",
+  "The server isn't responding right now. I answered locally; you can retry.",
+  "Сервер сейчас не отвечает. Я ответил локально; можешь повторить."
+ ],
+ [
+  "Cererea către AI nu a fost validă. Am răspuns local.",
+  "The request to AI wasn't valid. I answered locally.",
+  "Запрос к ИИ был некорректным. Я ответил локально."
+ ],
+ [
+  "Mentor AI (serverul jocului)",
+  "AI Mentor (game server)",
+  "ИИ-наставник (сервер игры)"
+ ],
+ [
+  "Această versiune a aplicației nu are Mentor AI: răspunde mentorul local, bazat pe regulile aplicației și pe datele tale reale.",
+  "This version of the app has no AI Mentor: the local mentor answers, based on the app's rules and your real data.",
+  "В этой версии приложения нет ИИ-наставника: отвечает локальный наставник, опираясь на правила приложения и твои реальные данные."
+ ],
+ [
+  "Mentorul AI e disponibil cu un cont gratuit. Până atunci răspunde mentorul local, bazat pe datele tale reale.",
+  "The AI Mentor is available with a free account. Until then, the local mentor answers, based on your real data.",
+  "ИИ-наставник доступен с бесплатным аккаунтом. А пока отвечает локальный наставник, опираясь на твои реальные данные."
+ ],
+ [
+  "Confirmă adresa de e-mail ca să folosești Mentorul AI. Până atunci răspunde mentorul local.",
+  "Confirm your email address to use the AI Mentor. Until then, the local mentor answers.",
+  "Подтверди e-mail, чтобы пользоваться ИИ-наставником. А пока отвечает локальный наставник."
+ ],
+ [
+  "Pentru răspunsuri AI, e nevoie de acordul tău ca un rezumat al datelor de joc să fie trimis furnizorului AI. Până atunci răspunde mentorul local.",
+  "For AI answers, you need to agree to a summary of your game data being sent to the AI provider. Until then, the local mentor answers.",
+  "Для ответов ИИ нужно твоё согласие на отправку сводки игровых данных поставщику ИИ. А пока отвечает локальный наставник."
+ ],
+ [
+  "Ai câștigat un Scut de serie ({0}/{1}). Te protejează automat dacă pierzi o zi.",
+  "You earned a Streak Shield ({0}/{1}). It automatically protects you if you miss a day.",
+  "Ты получил Щит серии ({0}/{1}). Он автоматически защитит тебя, если пропустишь день."
+ ],
+ [
+  "{0} de {1}. Bine ai revenit!",
+  "{0} of {1}. Welcome back!",
+  "{0} ({1}). С возвращением!"
+ ],
+ [
+  "Un Scut de serie ți-a protejat seria",
+  "A Streak Shield protected your streak",
+  "Щит серии защитил твою серию"
+ ],
+ [
+  "{0} ți-au protejat seria",
+  "{0} protected your streak",
+  "{0} защитили твою серию"
+ ],
+ [
+  "Bine ai revenit! Fii activ {0} zile la rând și îți recuperezi seria de {1}.",
+  "Welcome back! Be active {0} days in a row and you'll get back your streak of {1}.",
+  "С возвращением! Будь активен {0} дн. подряд, и ты вернёшь свою серию в {1}."
+ ],
+ [
+  "Detalii",
+  "Details",
+  "Подробнее"
+ ],
+ [
+  "Seria de {0} a fost recuperată. Felicitări!",
+  "Your streak of {0} has been restored. Congratulations!",
+  "Серия в {0} восстановлена. Поздравляем!"
+ ],
+ [
+  "{0} la rând! O realizare rară: continuă în ritmul tău.",
+  "{0} in a row! A rare achievement: keep going at your own pace.",
+  "{0} подряд! Редкое достижение: продолжай в своём темпе."
+ ],
+ [
+  "Seria ta: detalii",
+  "Your streak: details",
+  "Твоя серия: подробнее"
+ ],
+ [
+  "{0}{1} la rând{2}",
+  "{0}{1} in a row{2}",
+  "{0}{1} подряд{2}"
+ ],
+ [
+  "Misiunea de revenire",
+  "Comeback quest",
+  "Миссия возвращения"
+ ],
+ [
+  "Fii activ {0} zile la rând ({1}/{2}) și îți recuperezi seria de {3}.{4}",
+  "Be active {0} days in a row ({1}/{2}) and you'll get back your streak of {3}.{4}",
+  "Будь активен {0} дн. подряд ({1}/{2}), и ты вернёшь свою серию в {3}.{4}"
+ ],
+ [
+  " Azi e bifat ✓",
+  " Today is checked off ✓",
+  " Сегодня отмечено ✓"
+ ],
+ [
+  " Azi: o singură misiune mică ajunge.",
+  " Today: a single small quest is enough.",
+  " Сегодня: хватит одной маленькой миссии."
+ ],
+ [
+  "Păstrează-ți progresul în siguranță.",
+  "Keep your progress safe.",
+  "Сохрани свой прогресс в безопасности."
+ ],
+ [
+  "Cu un cont gratuit, progresul se salvează și în cont, ai Mentorul AI și te poți compara cu prietenii.",
+  "With a free account, your progress is also saved to your account, you get the AI Mentor, and you can compare yourself with friends.",
+  "С бесплатным аккаунтом прогресс сохраняется ещё и в аккаунте, у тебя есть ИИ-наставник и можно сравнивать себя с друзьями."
+ ],
+ [
+  "{0}Creează cont",
+  "{0}Create account",
+  "{0}Создать аккаунт"
+ ],
+ [
+  "Seria ta",
+  "Your streak",
+  "Твоя серия"
+ ],
+ [
+  "serie acum",
+  "current streak",
+  "текущая серия"
+ ],
+ [
+  "cea mai bună",
+  "best",
+  "рекорд"
+ ],
+ [
+  "zile active",
+  "active days",
+  "активных дней"
+ ],
+ [
+  "Scuturi de serie",
+  "Streak Shields",
+  "Щиты серии"
+ ],
+ [
+  "Ai {0} din {1}. {2}",
+  "You have {0} of {1}. {2}",
+  "У тебя {0} из {1}. {2}"
+ ],
+ [
+  "Primești un scut la fiecare {0} zile la rând. Dacă pierzi o zi, scutul se folosește automat și seria rămâne. Scuturile nu se cumpără.",
+  "You get a shield every {0} days in a row. If you miss a day, the shield is used automatically and your streak stays. Shields can't be bought.",
+  "Ты получаешь щит за каждые {0} дней подряд. Если пропустишь день, щит используется автоматически и серия сохраняется. Щиты нельзя купить."
+ ],
+ [
+  "Zile libere",
+  "Rest days",
+  "Выходные дни"
+ ],
+ [
+  "În zilele alese ca libere (cel mult {0} pe săptămână), seria nu se rupe dacă te odihnești. Dacă lucrezi totuși, ziua se numără normal. Odihna face parte din progres.",
+  "On the days you pick as rest days (at most {0} per week), your streak doesn't break if you rest. If you work anyway, the day counts as usual. Rest is part of progress.",
+  "В дни, выбранные выходными (не больше {0} в неделю), серия не прерывается, если ты отдыхаешь. Если всё же поработаешь, день засчитается как обычно. Отдых — часть прогресса."
+ ],
+ [
+  "Praguri",
+  "Milestones",
+  "Рубежи"
+ ],
+ [
+  "Zile consecutive cu cel puțin o activitate reală: o misiune, o sesiune Focus, o etapă de Boss sau revizuirea zilei.",
+  "Consecutive days with at least one real activity: a quest, a Focus session, a Boss stage, or the daily review.",
+  "Дни подряд хотя бы с одним реальным действием: миссия, сессия «Фокус», этап босса или обзор дня."
+ ],
+ [
+  "Misiunea de revenire: {0}/{1}",
+  "Comeback quest: {0}/{1}",
+  "Миссия возвращения: {0}/{1}"
+ ],
+ [
+  "Fii activ în fiecare zi până pe {0} și seria de {1} revine, ca și cum pauza n-ar fi existat. Poți folosi revenirea o dată la {2} de zile.",
+  "Be active every day until {0} and your streak of {1} comes back, as if the break never happened. You can use the comeback once every {2} days.",
+  "Будь активен каждый день до {0}, и твоя серия в {1} вернётся, как будто перерыва и не было. Возвращение можно использовать раз в {2} дней."
+ ],
+ [
+  "Următorul scut: peste {0} la rând.",
+  "Next shield: after {0} in a row.",
+  "Следующий щит: через {0} подряд."
+ ],
+ [
+  "Ai numărul maxim de scuturi.",
+  "You have the maximum number of shields.",
+  "У тебя максимальное число щитов."
+ ],
+ [
+  "Seria ta de {0} te așteaptă",
+  "Your streak of {0} is waiting for you",
+  "Твоя серия в {0} ждёт тебя"
+ ],
+ [
+  "O misiune mică sau revizuirea de seară (2 minute) o păstrează.",
+  "A small quest or the evening review (2 minutes) keeps it going.",
+  "Маленькая миссия или вечерний обзор (2 минуты) сохранят её."
+ ],
+ [
+  "{0}, un pas mic azi?",
+  "{0}, a small step today?",
+  "{0}, маленький шаг сегодня?"
+ ],
+ [
+  "Un pas mic azi?",
+  "A small step today?",
+  "Маленький шаг сегодня?"
+ ],
+ [
+  "Alege o misiune de 10–15 minute. Contează consecvența, nu perfecțiunea.",
+  "Pick a 10–15 minute quest. Consistency matters, not perfection.",
+  "Выбери миссию на 10–15 минут. Важна регулярность, а не идеальность."
+ ],
+ [
+  "Notificările sunt oprite pentru LIFE RPG. Le poți porni din Setări → Notificări → LIFE RPG.",
+  "Notifications are off for LIFE RPG. You can turn them on in Settings → Notifications → LIFE RPG.",
+  "Уведомления для LIFE RPG выключены. Их можно включить в Настройки → Уведомления → LIFE RPG."
+ ],
+ [
+  "Notificările nu sunt disponibile aici.",
+  "Notifications aren't available here.",
+  "Уведомления здесь недоступны."
+ ],
+ [
+  "Memento zilnic activ la {0}. Nu te deranjez dacă ai fost deja activ în ziua respectivă.",
+  "Daily reminder on at {0}. I won't bother you if you've already been active that day.",
+  "Ежедневное напоминание включено на {0}. Я не буду беспокоить, если ты уже был активен в этот день."
+ ]
+]

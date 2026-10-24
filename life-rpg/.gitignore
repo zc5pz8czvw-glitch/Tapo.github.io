@@ -1,0 +1,11 @@
+node_modules/
+build/
+.env
+.env.*
+!.env.example
+supabase/.temp/
+*.log
+.DS_Store
+ios/App/Pods/
+ios/App/App/public/
+test-results/
