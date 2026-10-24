@@ -2,12 +2,17 @@
   "name": "life-rpg",
   "version": "5.0.0",
   "private": true,
-  "description": "LIFE RPG — joc de progres personal (RO/EN/RU)",
+  "description": "LIFE RPG \u2014 joc de progres personal (RO/EN/RU)",
   "scripts": {
-    "build": "node tools/build-app.cjs"
+    "build": "node tools/build-app.cjs",
+    "stack:up": "supabase/local/dc.sh up -d && node tools/apply-migrations.mjs",
+    "stack:down": "supabase/local/dc.sh down -v",
+    "test:backend": "node --test --test-concurrency=1 tests/backend/"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "^2.117.3",
     "acorn": "^8.19.0",
-    "acorn-walk": "^8.3.5"
+    "acorn-walk": "^8.3.5",
+    "pg": "^8.23.1"
   }
 }

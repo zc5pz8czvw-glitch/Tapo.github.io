@@ -1,0 +1,131 @@
+# Stiva locală LIFE RPG (Supabase: Postgres + Auth + REST + Edge Functions + e-mail de test + AI simulat).
+# Pornire:  docker compose --env-file dev.env up -d      (din folderul supabase/local)
+# URL API:  http://localhost:54321   ·   e-mailuri de test: http://localhost:54324
+name: liferpg
+services:
+  db:
+    image: mirror.gcr.io/supabase/postgres:17.6.1.136
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: 5432
+      POSTGRES_PORT: 5432
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: postgres
+      POSTGRES_DB: postgres
+      JWT_EXP: 3600
+    volumes:
+      - ./init/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:ro
+      - ./init/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:ro
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
+    ports: ["54322:5432"]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+
+  auth:
+    image: mirror.gcr.io/supabase/gotrue:v2.197.0
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:54321
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      GOTRUE_SITE_URL: http://localhost:8080
+      GOTRUE_URI_ALLOW_LIST: "*"
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_ISSUER: http://localhost:54321/auth/v1
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: "false"
+      GOTRUE_MAILER_AUTOCONFIRM: "false"
+      GOTRUE_MAILER_OTP_LENGTH: 6
+      GOTRUE_MAILER_OTP_EXP: 3600
+      GOTRUE_PASSWORD_MIN_LENGTH: 8
+      GOTRUE_SMTP_ADMIN_EMAIL: no-reply@liferpg.local
+      GOTRUE_SMTP_HOST: mail
+      GOTRUE_SMTP_PORT: 1025
+      GOTRUE_SMTP_USER: ""
+      GOTRUE_SMTP_PASS: ""
+      GOTRUE_SMTP_SENDER_NAME: LIFE RPG
+      GOTRUE_SMTP_MAX_FREQUENCY: 1s
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: 1000
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: http://gw:8000/templates/confirmation.html
+      GOTRUE_MAILER_TEMPLATES_RECOVERY: http://gw:8000/templates/recovery.html
+      GOTRUE_MAILER_TEMPLATES_MAGIC_LINK: http://gw:8000/templates/magic_link.html
+      GOTRUE_MAILER_SUBJECTS_CONFIRMATION: "LIFE RPG — cod de confirmare / confirmation code / код подтверждения"
+      GOTRUE_MAILER_SUBJECTS_RECOVERY: "LIFE RPG — resetarea parolei / password reset / сброс пароля"
+      GOTRUE_MAILER_SUBJECTS_MAGIC_LINK: "LIFE RPG — cod de autentificare / sign-in code / код входа"
+
+  rest:
+    image: mirror.gcr.io/postgrest/postgrest:v14.18
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_MAX_ROWS: 1000
+      PGRST_DB_EXTRA_SEARCH_PATH: public
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: 3600
+
+  functions:
+    image: mirror.gcr.io/supabase/edge-runtime:v1.77.4
+    volumes:
+      - ./functions-main:/home/deno/functions/main:ro
+      - ../functions/mentor:/home/deno/functions/mentor:ro
+      - ../functions/_shared:/home/deno/functions/_shared:ro
+      - deno-cache:/root/.cache/deno
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      SUPABASE_URL: http://gw:8000
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      VERIFY_JWT: "true"
+      # Variabilele LOCAL_* (nu ANTHROPIC_*), ca stiva de test să nu preia din greșeală o cheie reală din mediul tău.
+      # Implicit totul merge la furnizorul simulat „mockai”. Pentru un test cu AI real: LOCAL_AI_BASE_URL= LOCAL_AI_KEY=sk-...
+      AI_PROVIDER: ${LOCAL_AI_PROVIDER:-anthropic}
+      ANTHROPIC_API_KEY: ${LOCAL_AI_KEY:-test-key}
+      ANTHROPIC_BASE_URL: ${LOCAL_AI_BASE_URL-http://mockai:8787}
+      OPENAI_API_KEY: ${LOCAL_AI_KEY:-test-key}
+      OPENAI_BASE_URL: ${LOCAL_OPENAI_BASE_URL:-http://mockai:8787/v1}
+      GEMINI_API_KEY: ${LOCAL_AI_KEY:-test-key}
+      GEMINI_BASE_URL: ${LOCAL_GEMINI_BASE_URL:-http://mockai:8787/v1beta}
+      AI_MODEL: ${LOCAL_AI_MODEL:-claude-haiku-5-5}
+      AI_DAILY_FREE: ${LOCAL_AI_DAILY_FREE:-15}
+      AI_PER_MINUTE: ${LOCAL_AI_PER_MINUTE:-6}
+      AI_GLOBAL_DAILY: ${LOCAL_AI_GLOBAL_DAILY:-3000}
+      AI_TIMEOUT_MS: ${LOCAL_AI_TIMEOUT_MS:-25000}
+    command: ["start", "--main-service", "/home/deno/functions/main"]
+
+  mail:
+    image: mirror.gcr.io/axllent/mailpit:v1.27
+    ports: ["54324:8025"]
+
+  mockai:
+    image: mirror.gcr.io/library/node:22-alpine
+    working_dir: /app
+    volumes: ["./mockai.mjs:/app/mockai.mjs:ro"]
+    command: ["node", "mockai.mjs"]
+
+  gw:
+    image: mirror.gcr.io/library/node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./gateway.mjs:/app/gateway.mjs:ro
+      - ../templates:/app/templates:ro
+    command: ["node", "gateway.mjs"]
+    ports: ["54321:8000"]
+    depends_on: [auth, rest, functions]
+
+volumes:
+  deno-cache:
