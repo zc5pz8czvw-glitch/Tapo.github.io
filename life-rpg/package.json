@@ -13,7 +13,9 @@
     "test:e2e": "node --test --test-concurrency=1 'tests/e2e/*.e2e.mjs'",
     "icons": "node tools/render-icons.cjs app/art/icon.svg app/public/icons",
     "site": "node tools/build-app.cjs && node tools/build-site.mjs && node tools/publish-web.mjs",
-    "test": "npm run test:backend && npm run test:e2e"
+    "test": "npm run test:backend && npm run test:e2e",
+    "screenshots": "node tools/screenshots.mjs",
+    "test:load": "node tests/load/load.mjs 100 60"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.3",

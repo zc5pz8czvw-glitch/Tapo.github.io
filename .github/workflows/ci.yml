@@ -15,8 +15,8 @@ jobs:
   web:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with: { node-version: 22, cache: npm, cache-dependency-path: life-rpg/package-lock.json }
       - run: npm ci
       - name: Construiește jocul (eșuează dacă lipsesc traduceri)
@@ -27,8 +27,8 @@ jobs:
     runs-on: macos-latest
     needs: web
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with: { node-version: 22, cache: npm, cache-dependency-path: life-rpg/package-lock.json }
       - uses: maxim-lobanov/setup-xcode@v1
         with: { xcode-version: latest-stable }
