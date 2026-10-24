@@ -1067,6 +1067,9 @@ const CFG = {
   /* Salvare în cont: pauza (ms) după ultima modificare înainte de trimitere */
   cloud: { debounceMs: 5000 },
 
+  /* Seria: scuturi câștigate prin joc (niciodată cumpărate), zile libere alese, misiune de revenire după o pauză */
+  guard: { shieldEvery: 7, maxShields: 2, maxRestDays: 2, comebackDays: 3, comebackMaxGap: 14, comebackCooldownDays: 30, comebackMinStreak: 3, milestones: [7, 30, 100, 365] },
+
   /* Mentor AI: câte mesaje și câte date trimitem (rezumat structurat, nu tot istoricul) */
   ai: { chatTurns: 10, recentCompletions: 10, recentReviews: 3, maxAnswerChars: 8000, timeoutMs: 40000, hintAfterS: 8, localAfterS: 15 },
 
@@ -1419,9 +1422,10 @@ const Val = (() => {
       plans: {},
       mentor: { messages: [], suggestions: [], recs: [], lastAnalysis: null },
       focus: { active: null, history: [] },
-      settings: { skin: 'dark', sound: false, haptics: true, motion: 'auto', toasts: true, cloud: true, ai: true, reminder: true },
+      settings: { skin: 'dark', sound: false, haptics: true, motion: 'auto', toasts: true, cloud: true, ai: true, reminder: true, restDays: [], notify: { on: false, time: '20:00' } },
       seen: { achievements: {}, tips: {} },
-      social: { pid: U.uid('pl'), friends: [], live: false }
+      social: { pid: U.uid('pl'), friends: [], live: false },
+      streak: { shields: 0, bridged: [], lastAwardKey: null, comeback: null, comebackAt: null, milestones: {} }
     };
   }
 
@@ -1628,6 +1632,18 @@ const Val = (() => {
       const s = S.settings, T = N.settings;
       T.skin = s.skin === 'light' ? 'light' : 'dark'; T.sound = B_(s.sound, false); T.haptics = B_(s.haptics, true);
       T.motion = ['auto', 'reduced', 'full'].includes(s.motion) ? s.motion : 'auto'; T.toasts = B_(s.toasts, true); T.cloud = B_(s.cloud, true); T.ai = B_(s.ai, true); T.reminder = B_(s.reminder, true);
+      T.restDays = U.unique((Array.isArray(s.restDays) ? s.restDays : []).map(Number).filter((d) => Number.isInteger(d) && d >= 0 && d <= 6)).slice(0, CFG.guard.maxRestDays);
+      T.notify = { on: isObj(s.notify) ? B_(s.notify.on, false) : false, time: isObj(s.notify) && /^([01]\d|2[0-3]):[0-5]\d$/.test(String(s.notify.time)) ? s.notify.time : '20:00' };
+    }
+    /* seria: scuturi, zile protejate, revenire */
+    if (isObj(S.streak)) {
+      const g = S.streak, G = N.streak;
+      G.shields = Math.max(0, Math.min(CFG.guard.maxShields, Math.round(Number(g.shields) || 0)));
+      G.bridged = U.unique((Array.isArray(g.bridged) ? g.bridged : []).filter((k) => U.isKey(k))).sort().slice(-400);
+      G.lastAwardKey = U.isKey(g.lastAwardKey) ? g.lastAwardKey : null;
+      G.comebackAt = TS(g.comebackAt, null);
+      if (isObj(g.comeback) && U.isKey(g.comeback.start) && Array.isArray(g.comeback.gap)) G.comeback = { start: g.comeback.start, prev: Math.max(0, Math.round(Number(g.comeback.prev) || 0)), gap: g.comeback.gap.filter((k) => U.isKey(k)).slice(0, CFG.guard.comebackMaxGap) };
+      if (isObj(g.milestones)) for (const k of Object.keys(g.milestones)) if (CFG.guard.milestones.includes(Number(k))) G.milestones[k] = TS(g.milestones[k], U.now());
     }
     /* prieteni și clasament */
     if (isObj(S.social)) {
@@ -1959,12 +1975,26 @@ const Stats = (() => {
     for (const t of S.xpLog) if (ACTIVE_TYPES.includes(t.type) && t.amount > 0 && !rev.has(t.id)) set.add(t.dateKey);
     return set;
   }
-  function streaks(set, todayKey) {
-    let cur = 0; let k = set.has(todayKey) ? todayKey : U.addDays(todayKey, -1);
-    while (set.has(k)) { cur++; k = U.addDays(k, -1); }
-    const days = Array.from(set).sort(); let best = 0, run = 0, prev = null;
-    for (const d of days) { run = prev && U.diffDays(prev, d) === 1 ? run + 1 : 1; if (run > best) best = run; prev = d; }
-    return { cur, best: Math.max(best, cur) };
+  /* seria: zile consecutive cu activitate. Zilele „punte” (scut folosit, zi liberă aleasă, recuperate prin revenire)
+     nu rup seria, dar nici nu o măresc: seria numără doar zile cu activitate reală. */
+  function streaks(set, todayKey, bridge) {
+    const isBridge = typeof bridge === 'function' ? bridge : () => false;
+    const days = Array.from(set).sort();
+    if (!days.length) return { cur: 0, best: 0, last: null };
+    let run = 0, best = 0, k = days[0], guard = 0;
+    const end = todayKey > days[days.length - 1] ? todayKey : days[days.length - 1];
+    while (k <= end && guard++ < 20000) {
+      if (set.has(k)) { run++; if (run > best) best = run; }
+      else if (k === todayKey) { /* ziua de azi nu e încă pierdută */ }
+      else if (!isBridge(k)) run = 0;
+      k = U.addDays(k, 1);
+    }
+    return { cur: run, best: Math.max(best, run), last: days[days.length - 1] };
+  }
+  /* zilele care nu rup seria pentru acest jucător */
+  function bridgeFn(S) {
+    const br = new Set((S.streak && S.streak.bridged) || []), rest = new Set((S.settings && S.settings.restDays) || []);
+    return (k) => br.has(k) || rest.has(U.parseKey(k).getDay());
   }
 
   /* numărul de misiuni finalizate care respectă un criteriu de abilitate */
@@ -1981,7 +2011,7 @@ const Stats = (() => {
       if ((c.note || '').trim().length >= CFG.rewards.proofChars) byKindProof[c.kind] = (byKindProof[c.kind] || 0) + 1;
       for (const a of c.attrs) byAttr[a] = (byAttr[a] || 0) + 1;
     }
-    const set = activeDaySet(S); const st = streaks(set, U.dateKey());
+    const set = activeDaySet(S); const st = streaks(set, U.dateKey(), bridgeFn(S));
     const stepTags = {};
     for (const q of S.quests) for (const s of q.steps) if (s.done && s.tag && (s.note || '').trim().length >= CFG.rewards.proofChars) stepTags[s.tag] = true;
     const hist = S.focus.history;
@@ -2204,7 +2234,7 @@ const Stats = (() => {
 
   const todayXp = (S) => { const k = U.dateKey(); return Math.max(0, U.sum(S.xpLog.filter((t) => t.dateKey === k).map((t) => t.amount))); };
 
-  return { validCompletions, reversedIds, activeDaySet, streaks, core, crit, matchQuests, totalAt, xpByDay, attrGain, week, reality, timeline, usageOn, todayXp, splitLines };
+  return { validCompletions, reversedIds, activeDaySet, streaks, bridgeFn, core, crit, matchQuests, totalAt, xpByDay, attrGain, week, reality, timeline, usageOn, todayXp, splitLines };
 })();
 
 ;
@@ -2332,8 +2362,70 @@ const Eng = (() => {
   /* ===================================================================================
      DE LA ZI LA ZI: expirări, resetarea misiunilor zilnice repetitive
      =================================================================================== */
+  /* ===================================================================================
+     SERIA: scuturi (câștigate la fiecare 7 zile la rând, cel mult 2), folosite automat pentru o zi pierdută;
+     după o pauză mai lungă: misiunea de revenire (3 zile active la rând) recuperează seria, o dată la 30 de zile.
+     Nimic nu se cumpără și nimic nu penalizează XP-ul.
+     =================================================================================== */
+  function streakBefore(S, dayKey) {
+    const set = Stats.activeDaySet(S), sub = new Set(Array.from(set).filter((k) => k <= dayKey));
+    return Stats.streaks(sub, dayKey, Stats.bridgeFn(S)).cur;
+  }
+  /* la începutul unei zile noi: zilele pierdute de la ultima activitate până ieri */
+  function guardRollover(S, out) {
+    const G = S.streak, td = today(), set = Stats.activeDaySet(S), br = Stats.bridgeFn(S);
+    const days = Array.from(set).filter((k) => k < td).sort(); if (!days.length) return;
+    const last = days[days.length - 1];
+    const gap = []; for (let k = U.addDays(last, 1); k < td && gap.length <= CFG.guard.comebackMaxGap + 1; k = U.addDays(k, 1)) if (!br(k)) gap.push(k);
+    if (!gap.length) return;
+    const prev = streakBefore(S, last);
+    if (prev < 2) return;
+    if (gap.length <= G.shields) {
+      G.shields -= gap.length; G.bridged = U.unique(G.bridged.concat(gap)).sort().slice(-400);
+      out.shieldsUsed = gap.length; emit({ kind: 'shield_used', n: gap.length, streak: prev });
+      return;
+    }
+    /* seria s-a rupt: oferim misiunea de revenire (dacă merită și nu am folosit-o recent) */
+    const cool = G.comebackAt && U.diffDays(U.dateKey(G.comebackAt), td) < CFG.guard.comebackCooldownDays;
+    if (!G.comeback && !cool && prev >= CFG.guard.comebackMinStreak && gap.length <= CFG.guard.comebackMaxGap) {
+      G.comeback = { start: td, prev, gap };
+      out.comeback = true; emit({ kind: 'comeback_offer', prev });
+    }
+  }
+  /* după fiecare activitate: scuturi câștigate, progresul revenirii, praguri sărbătorite */
+  function guardAfter(S) {
+    const G = S.streak, td = today(), set = Stats.activeDaySet(S);
+    if (G.comeback) {
+      const cb = G.comeback; let n = 0, broken = false;
+      for (let k = cb.start; k <= td; k = U.addDays(k, 1)) { if (set.has(k)) n++; else if (k !== td) { broken = true; break; } }
+      if (n >= CFG.guard.comebackDays) {
+        const fill = []; for (let k = cb.gap[0]; k < cb.start; k = U.addDays(k, 1)) fill.push(k);
+        G.bridged = U.unique(G.bridged.concat(fill)).sort().slice(-400); G.comeback = null; G.comebackAt = T();
+        emit({ kind: 'comeback_done', prev: cb.prev });
+      } else if (broken) { G.comeback = null; emit({ kind: 'comeback_lost' }); }
+    }
+    const st = Stats.core(S);
+    if (set.has(td) && st.streak > 0 && st.streak % CFG.guard.shieldEvery === 0 && G.lastAwardKey !== td) {
+      G.lastAwardKey = td;
+      if (G.shields < CFG.guard.maxShields) { G.shields++; emit({ kind: 'shield_earned', shields: G.shields }); }
+    }
+    for (const m of CFG.guard.milestones) if (st.streak >= m && !G.milestones[m]) { G.milestones[m] = T(); emit({ kind: 'milestone', days: m }); }
+  }
+  function comebackProgress(S) {
+    const cb = S.streak.comeback; if (!cb) return null;
+    const td = today(), set = Stats.activeDaySet(S); let n = 0;
+    for (let k = cb.start; k <= td; k = U.addDays(k, 1)) if (set.has(k)) n++;
+    return { done: Math.min(n, CFG.guard.comebackDays), need: CFG.guard.comebackDays, prev: cb.prev, lastDay: U.addDays(cb.start, CFG.guard.comebackDays - 1), todayDone: set.has(td) };
+  }
+  function setRestDays(S, days) {
+    const d = U.unique((days || []).map(Number).filter((x) => Number.isInteger(x) && x >= 0 && x <= 6));
+    if (d.length > CFG.guard.maxRestDays) return { ok: false, error: 'Poți alege cel mult ' + CFG.guard.maxRestDays + ' zile libere pe săptămână.' };
+    S.settings.restDays = d; return { ok: true };
+  }
+
   function rollover(S) {
     const td = today(); const out = { reset: 0, expired: 0, changed: false };
+    if (S.meta.lastTick !== td) { try { guardRollover(S, out); } catch (e) { console.error(e); } }
     for (const q of S.quests) {
       if (q.archived) continue;
       if (q.repeat === 'daily') {
@@ -2355,7 +2447,7 @@ const Eng = (() => {
     syncPlan(S);
     for (const k of Object.keys(S.plans)) if (U.diffDays(k, td) > 120) delete S.plans[k];
     S.meta.lastTick = td;
-    out.changed = out.reset > 0 || out.expired > 0;
+    out.changed = out.reset > 0 || out.expired > 0 || !!out.shieldsUsed || !!out.comeback;
     return out;
   }
 
@@ -2682,6 +2774,7 @@ const Eng = (() => {
       }
       if (!any) break; st = Stats.core(S);
     }
+    try { guardAfter(S); } catch (e) { console.error(e); }
     return got;
   }
 
@@ -2903,7 +2996,8 @@ const Eng = (() => {
     after, skillState, unlockSkill, tierOf, SKILL_BY_ID,
     focusElapsed, focusStart, focusPause, focusResume, focusStop, focusDiscard, focusFinish,
     saveReview, setReviewAI, setWeeklyAI, REVIEW_FIELDS,
-    applyProfile, finishOnboarding, addSuggestionDrafts, sanitizeSuggestion, acceptSuggestion, rejectSuggestion, addMessage
+    applyProfile, finishOnboarding, addSuggestionDrafts, sanitizeSuggestion, acceptSuggestion, rejectSuggestion, addMessage,
+    guardAfter, comebackProgress, setRestDays
   };
 })();
 
@@ -3256,7 +3350,7 @@ const Cloud = (() => {
     const job = chain.then(async () => {
       if (!Host.hasCloud()) return { ok: false, code: 'off' };
       if (st.paused && !opts.force) return { ok: false, code: 'paused' };
-      if (U.now() < backoffUntil && !opts.force) return { ok: false, code: 'backoff' };
+      if (U.now() < backoffUntil && !opts.force && !opts.now) { scheduleRetry(backoffUntil - U.now() + 200); return { ok: false, code: 'backoff' }; }
       if (!Backend.isOnline()) { st.dirty = true; setPhase('offline', ERR.offline); return { ok: false, code: 'offline' }; }
       const hash = contentHash(S);
       if (!opts.force && hash === lastHash) { st.dirty = false; if (st.phase === 'pending' || st.phase === 'offline') setPhase('saved'); return { ok: true, skipped: true }; }
@@ -3273,7 +3367,7 @@ const Cloud = (() => {
           S.meta.cloudRev = null;
         }
         const w = await writeAll(S, man, opts.force);
-        S.meta.cloudRev = w.rev; lastHash = w.hash; lastPushAt = U.now(); st.lastSyncAt = lastPushAt; st.dirty = false; st.remote = null; st.pendingRev = null; st.busy = false;
+        S.meta.cloudRev = w.rev; lastHash = w.hash; lastPushAt = U.now(); backoffUntil = 0; st.lastSyncAt = lastPushAt; st.dirty = false; st.remote = null; st.pendingRev = null; st.busy = false;
         setPhase('saved', null);
         return { ok: true, rev: w.rev, wrote: !w.adopted, adopted: w.adopted };
       } catch (e) {
@@ -3284,7 +3378,7 @@ const Cloud = (() => {
           st.remote = rm; st.paused = true; setPhase('conflict', 'Există în cont o copie diferită de cea de pe acest dispozitiv.');
           return { ok: false, code: 'conflict', remote: st.remote };
         }
-        if (code === 'rate_limited') { setPhase('pending', null); scheduleRetry(3000); return { ok: false, code }; }
+        if (code === 'rate_limited') { backoffUntil = 0; setPhase('pending', null); scheduleRetry(3000); return { ok: false, code }; }
         if (code === 'offline') { st.dirty = true; setPhase('offline', ERR.offline); return { ok: false, code }; }
         if (code === 'too_large' || code === 'account_disabled') st.paused = true;
         if (code === 'not_authenticated') st.paused = true;
@@ -3310,7 +3404,8 @@ const Cloud = (() => {
     const wait = Math.max(C.debounceMs, lastPushAt ? 15000 - (U.now() - lastPushAt) : 0);
     timer = setTimeout(() => { if (getState) push(getState()); }, wait);
   }
-  function flushNow() { clearTimeout(timer); return getState ? push(getState()) : Promise.resolve({ ok: false, code: 'off' }); }
+  /* trimitere imediată (butonul „Salvează acum”, ieșirea din aplicație): ignoră pauza de după o eroare */
+  function flushNow() { clearTimeout(timer); return getState ? push(getState(), { now: true }) : Promise.resolve({ ok: false, code: 'off' }); }
 
   /* ---------- verificarea de la pornire / după autentificare ---------- */
   async function check(S) {
@@ -4437,6 +4532,13 @@ function processEvents(evs) {
   for (const e of evs) if (e.kind === 'skill') { const n = Eng.SKILL_BY_ID[e.id]; if (n) toast('Abilitate deblocată: ' + n.name, { kind: 'good', icon: 'skills' }); }
   const big = evs.find((e) => e.kind === 'complete' && e.xp >= 100);
   if (big) FX.confetti(36, recent ? recent.x : null, recent ? recent.y : null);
+  for (const e of evs) {
+    if (e.kind === 'shield_earned') toast('Ai câștigat un Scut de serie (' + e.shields + '/' + CFG.guard.maxShields + '). Te protejează automat dacă pierzi o zi.', { kind: 'good', icon: 'shield', ms: 5000 });
+    else if (e.kind === 'shield_used') toast((e.n === 1 ? 'Un Scut de serie ți-a protejat seria' : U.pl(e.n, 'Scut de serie', 'Scuturi de serie') + ' ți-au protejat seria') + ' de ' + U.pl(e.streak, 'zi', 'zile') + '. Bine ai revenit!', { kind: 'info', icon: 'shield', ms: 6000 });
+    else if (e.kind === 'comeback_offer') toast('Bine ai revenit! Fii activ ' + CFG.guard.comebackDays + ' zile la rând și îți recuperezi seria de ' + U.pl(e.prev, 'zi', 'zile') + '.', { kind: 'info', icon: 'flame', ms: 7000, action: { label: 'Detalii', fn: () => A['streak-open']() } });
+    else if (e.kind === 'comeback_done') { toast('Seria de ' + U.pl(e.prev, 'zi', 'zile') + ' a fost recuperată. Felicitări!', { kind: 'good', icon: 'flame', ms: 6000 }); FX.confetti(30); }
+    else if (e.kind === 'milestone') { toast(U.pl(e.days, 'zi', 'zile') + ' la rând! O realizare rară: continuă în ritmul tău.', { kind: 'good', icon: 'flame', ms: 6000 }); FX.confetti(40); }
+  }
 }
 
 /* ===================================================================================
@@ -4448,6 +4550,7 @@ function commit(o) {
   try { if (S.settings.cloud !== false && !UI.flags.hold) Cloud.schedule(); } catch (e) { /* cloud opțional */ }
   try { if (!UI.flags.hold) { Social.schedule(S); clearTimeout(UI.nameT); UI.nameT = setTimeout(() => { syncProfileName(false); }, 3000); } } catch (e) { /* clasament opțional */ }
   processEvents(Eng.drain());
+  try { if (S.settings.notify && S.settings.notify.on) Notify.plan(S); } catch (e) { /* memento opțional */ }
   if (o.render !== false) render(o);
   if (Ov.count() && !o.keepSheets) Ov.refreshAll();
   updateSaveUI();
@@ -4706,10 +4809,11 @@ Screens.home = function () {
     <div class="hd">${avatarH(58)}<div class="who"><b>${S.profile.name || 'Jucător'}</b><small>Lv. ${pi.level} · ${pi.rank.name}</small></div></div>
     <div class="xpwrap"><div class="row between xs" style="color:#f3eefe;margin-bottom:4px"><span>XP: ${U.fmtNum(pi.inLevel)} / ${U.fmtNum(pi.need)}</span><span>${U.fmtNum(pi.remaining)} XP până la nivelul ${pi.level + 1}</span></div>${barH('home.xp', pi.pct, 'xp thick shimmer')}</div>
     <div class="rank">${ic('crown')}Rang: ${pi.rank.name}</div>
-    <div class="chips"><span class="chip">${ic('flame')}${U.pl(st.streak, 'zi', 'zile')} la rând</span><span class="chip">${ic('zap')}${U.fmtNum(todayXp)} XP azi</span></div>
+    <div class="chips"><button class="chip" data-a="streak-open" aria-label="Seria ta: detalii">${ic('flame')}${U.pl(st.streak, 'zi', 'zile')} la rând${S.streak.shields ? h`<span style="margin-left:6px;display:inline-flex;align-items:center;gap:2px">${ic('shield')}${S.streak.shields}</span>` : ''}</button><span class="chip">${ic('zap')}${U.fmtNum(todayXp)} XP azi</span></div>
     <div class="quote">${I18N.q(quoteOfDay())}</div>
   </section>
 
+  ${comebackCard()}${accountNudge(st)}
   ${rem.map((r) => h`<div class="note mt12" style="--rgb:${r.rgb}">${ic(r.icon)}<div class="grow">${r.text}</div><button class="btn xs ghost" data-a="go" data-to="${r.to}" ${r.p ? h`data-p="${JSON.stringify(r.p)}"` : ''}>${r.label}</button></div>`)}
 
   ${mission ? h`<button class="mission" data-a="quest-open" data-id="${mission.id}" aria-label="Misiunea zilei: ${mission.title}">
@@ -4719,7 +4823,7 @@ Screens.home = function () {
     : h`<div class="mission" style="cursor:default"><span class="mi">${ic('flag')}</span><span class="grow"><small class="k">Misiunea Zilei</small><b>Nicio misiune activă</b><span class="xs muted">Adaugă una sau cere sugestii Mentorului.</span></span><button class="btn xs green" data-a="quest-new">${ic('plus')}Adaugă</button></div>`}
 
   <div class="stat3">
-    <div class="tile">${ic('flame', 't-orange')}<b>${st.streak}</b><small>Serie (zile)</small></div>
+    <button class="tile" data-a="streak-open" aria-label="Seria ta: detalii">${ic('flame', 't-orange')}<b>${st.streak}</b><small>Serie (zile)</small></button>
     <div class="tile">${ic('zap', 't-gold')}<b>${U.fmtNum(todayXp)}</b><small>XP azi</small></div>
     <div class="tile">${ic('checkCircle', 't-green')}<b>${doneN}/${plan.length}</b><small>Misiuni azi</small></div>
   </div>
@@ -4780,6 +4884,103 @@ function attrSheet(id) {
   });
 }
 A['attr-open'] = (el) => attrSheet(el.dataset.id);
+
+;
+/* ===================================================================================
+   SERIA TA: scuturi, zile libere, misiunea de revenire (fără pedepse, fără cumpărături)
+   =================================================================================== */
+function comebackCard() {
+  const cp = Eng.comebackProgress(S); if (!cp) return '';
+  const dots = Array.from({ length: cp.need }, (_, i) => h`<span style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:${i < cp.done ? 'rgb(var(--orange))' : 'rgb(var(--orange) / .25)'}"></span>`);
+  return h`<button class="card tap mt12" style="width:100%;text-align:left;--rgb:var(--orange)" data-a="streak-open"><div class="row g12">${ic('flame', 's28 t-orange')}<div class="grow"><b>Misiunea de revenire</b><div class="xs muted mt4">Fii activ ${cp.need} zile la rând (${cp.done}/${cp.need}) și îți recuperezi seria de ${U.pl(cp.prev, 'zi', 'zile')}.${cp.todayDone ? ' Azi e bifat ✓' : ' Azi: o singură misiune mică ajunge.'}</div><div class="mt8">${dots}</div></div></div></button>`;
+}
+/* invitația la cont: o singură dată, după ce jucătorul are progres real (nu la prima pornire) */
+function accountNudge(st) {
+  if (!Backend.configured || Host.hasCloud() || S.seen.tips.accNudge || st.activeDays < 2) return '';
+  return h`<div class="note mt12" style="--rgb:var(--purple)">${ic('cloud')}<div class="grow"><b>Păstrează-ți progresul în siguranță.</b> Cu un cont gratuit, progresul se salvează și în cont, ai Mentorul AI și te poți compara cu prietenii.<div class="btn-row mt8"><button class="btn xs" data-a="account-open">${ic('userPlus')}Creează cont</button><button class="btn xs quiet" data-a="nudge-hide">Nu acum</button></div></div></div>`;
+}
+A['nudge-hide'] = () => { S.seen.tips.accNudge = true; commit(); };
+A['streak-open'] = () => sheet('streak', 'Seria ta', () => {
+  const st = Stats.core(S), G = S.streak, cp = Eng.comebackProgress(S), rest = S.settings.restDays || [];
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  const shields = Array.from({ length: CFG.guard.maxShields }, (_, i) => h`<span style="display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;margin-right:6px;background:${i < G.shields ? 'rgb(var(--blue) / .22)' : 'rgb(var(--faint) / .15)'};color:${i < G.shields ? 'var(--t-blue)' : 'var(--faint)'}">${ic('shield')}</span>`);
+  const next = CFG.guard.shieldEvery - (st.streak % CFG.guard.shieldEvery);
+  const ms = CFG.guard.milestones.map((m) => h`<span class="chip ${G.milestones[m] ? 'c-green' : 'plain'}">${ic(G.milestones[m] ? 'check' : 'flame')}${U.pl(m, 'zi', 'zile')}</span>`);
+  return h`${sheetHead('Seria ta', 'Zile consecutive cu cel puțin o activitate reală: o misiune, o sesiune Focus, o etapă de Boss sau revizuirea zilei.')}
+    <div class="grid3"><div class="tile" style="--rgb:var(--orange)">${ic('flame')}<b>${st.streak}</b><small>serie acum</small></div><div class="tile" style="--rgb:var(--gold)">${ic('trophy')}<b>${st.bestStreak}</b><small>cea mai bună</small></div><div class="tile" style="--rgb:var(--green)">${ic('calendarCheck')}<b>${st.activeDays}</b><small>zile active</small></div></div>
+    ${cp ? h`<div class="note mt12" style="--rgb:var(--orange)">${ic('flame')}<div class="grow"><b>Misiunea de revenire: ${cp.done}/${cp.need}</b><br>Fii activ în fiecare zi până pe ${U.fmtDayLong(cp.lastDay)} și seria de ${U.pl(cp.prev, 'zi', 'zile')} revine, ca și cum pauza n-ar fi existat. Poți folosi revenirea o dată la ${CFG.guard.comebackCooldownDays} de zile.</div></div>` : ''}
+    <h3 class="cap mt16 mb8">Scuturi de serie</h3>
+    <div class="row">${shields}<div class="grow sm muted">Ai ${G.shields} din ${CFG.guard.maxShields}. ${G.shields < CFG.guard.maxShields ? 'Următorul scut: peste ' + U.pl(next, 'zi activă', 'zile active') + ' la rând.' : 'Ai numărul maxim de scuturi.'}</div></div>
+    <p class="hint mt8">Primești un scut la fiecare ${CFG.guard.shieldEvery} zile la rând. Dacă pierzi o zi, scutul se folosește automat și seria rămâne. Scuturile nu se cumpără.</p>
+    <h3 class="cap mt16 mb8">Zile libere</h3>
+    <div class="seg" role="group" aria-label="Zile libere" style="flex-wrap:wrap">${order.map((d) => h`<button aria-pressed="${rest.includes(d)}" data-a="rest-day" data-v="${d}">${U.DAYS_S[d]}</button>`)}</div>
+    <p class="hint mt8">În zilele alese ca libere (cel mult ${CFG.guard.maxRestDays} pe săptămână), seria nu se rupe dacă te odihnești. Dacă lucrezi totuși, ziua se numără normal. Odihna face parte din progres.</p>
+    <h3 class="cap mt16 mb8">Praguri</h3>
+    <div class="pill-row">${ms}</div>`;
+});
+A['rest-day'] = (el) => {
+  const d = Number(el.dataset.v), cur = (S.settings.restDays || []).slice();
+  const nx = cur.includes(d) ? cur.filter((x) => x !== d) : cur.concat([d]);
+  const r = Eng.setRestDays(S, nx);
+  if (!r.ok) return toast(r.error, { kind: 'info' });
+  commit({ keepSheets: true }); Ov.refresh('streak');
+};
+
+/* ===================================================================================
+   MEMENTO ZILNIC (opțional, cel mult unul pe zi, la ora aleasă; doar în aplicația instalată pe telefon)
+   =================================================================================== */
+const Notify = (() => {
+  const LN = () => Platform.plugin('LocalNotifications');
+  const available = () => !!LN();
+  const BASE_ID = 4100;
+  let planT = null;
+  async function permission(ask) {
+    const P = LN(); if (!P) return 'unavailable';
+    try { let r = await P.checkPermissions(); if (r.display === 'prompt' && ask) r = await P.requestPermissions(); return r.display; } catch (e) { return 'unavailable'; }
+  }
+  function texts(S, key) {
+    const st = Stats.core(S), name = S.profile.name || '';
+    if (st.streak >= 2) return { title: 'Seria ta de ' + U.pl(st.streak, 'zi', 'zile') + ' te așteaptă', body: 'O misiune mică sau revizuirea de seară (2 minute) o păstrează.' };
+    return { title: name ? name + ', un pas mic azi?' : 'Un pas mic azi?', body: 'Alege o misiune de 10–15 minute. Contează consecvența, nu perfecțiunea.' };
+  }
+  /* reprogramează următoarele 7 zile; azi doar dacă nu ai fost încă activ și ora n-a trecut */
+  async function plan(S) {
+    const P = LN(); if (!P || !S) return;
+    clearTimeout(planT);
+    planT = setTimeout(async () => {
+      try {
+        const pend = await P.getPending();
+        const mine = ((pend && pend.notifications) || []).filter((n) => n.id >= BASE_ID && n.id < BASE_ID + 10).map((n) => ({ id: n.id }));
+        if (mine.length) await P.cancel({ notifications: mine });
+        const N = S.settings.notify; if (!N || !N.on) return;
+        if ((await permission(false)) !== 'granted') return;
+        const [hh, mm] = N.time.split(':').map(Number), td = U.dateKey(), active = Stats.activeDaySet(S).has(td), list = [];
+        for (let i = 0; i < 7; i++) {
+          const key = U.addDays(td, i), at = U.parseKey(key); at.setHours(hh, mm, 0, 0);
+          if (at.getTime() <= Date.now() + 60000) continue;
+          if (i === 0 && active) continue;
+          if ((S.settings.restDays || []).includes(at.getDay())) continue;
+          const t = texts(S, key);
+          list.push({ id: BASE_ID + i, title: t.title, body: t.body, schedule: { at, allowWhileIdle: true } });
+        }
+        if (list.length) await P.schedule({ notifications: list });
+      } catch (e) { console.error(e); }
+    }, 800);
+  }
+  return { available, permission, plan };
+})();
+A['notify-toggle'] = async () => {
+  const N = S.settings.notify = S.settings.notify || { on: false, time: '20:00' };
+  if (!N.on) {
+    const p = await Notify.permission(true);
+    if (p !== 'granted') return toast(p === 'denied' ? 'Notificările sunt oprite pentru LIFE RPG. Le poți porni din Setări → Notificări → LIFE RPG.' : 'Notificările nu sunt disponibile aici.', { kind: 'info', ms: 6000 });
+    N.on = true;
+  } else N.on = false;
+  commit({ keepSheets: true }); Notify.plan(S); if (Ov.has('notif')) Ov.refresh('notif');
+  toast(N.on ? 'Memento zilnic activ la ' + N.time + '. Nu te deranjez dacă ai fost deja activ în ziua respectivă.' : 'Memento-ul zilnic este oprit.', { kind: N.on ? 'good' : 'info' });
+};
+UI.forms.ntf = UI.forms.ntf || { time: '' };
+Hk.notifyTime = (el) => { const v = String(el.value || ''); if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(v)) return; S.settings.notify.time = v; Store.save(S); Notify.plan(S); };
 
 ;
 /* ---- 12-ui-quests.js ---- */
@@ -5595,7 +5796,7 @@ function leaderboardHtml() {
       ${ls.error === 'offline' ? h`<div class="note mt8">${ic('cloudOff')}<div class="grow">Fără internet: vezi ultimele scoruri cunoscute.</div></div>` : ''}
     </div>${leagueHtml()}`;
   } else if (Backend.configured) {
-    liveCard = h`<div class="note mt12" style="--rgb:var(--purple)">${ic('sparkle')}<div class="grow"><b>Cu un cont gratuit</b> scorurile prietenilor se actualizează singure și poți intra în Liga săptămânii.<button class="btn xs mt8" data-a="account-open">${ic('userPlus')}Creează cont / Autentifică-te</button></div></div>`;
+    liveCard = h`<div class="note mt12" style="--rgb:var(--purple)">${ic('sparkle')}<div class="grow"><b>Cu un cont gratuit</b> scorurile prietenilor se actualizează singure și poți intra în Liga săptămânii.<div class="mt8"><button class="btn xs" data-a="account-open">${ic('userPlus')}Creează cont / Autentifică-te</button></div></div></div>`;
   }
   const how = h`<p class="hint mt16">Clasamentul compară activitatea înregistrată de fiecare jucător. Serverul limitează creșterile neplauzibile, dar nu poate verifica viața reală: jucați corect.</p>`;
   return h`${seg}${list}${alone}${codeCard}${addCard}${liveCard}${how}`;
@@ -6035,7 +6236,7 @@ Screens.mentor = function () {
     <div class="src">${ic(ai ? 'sparkle' : 'shield')}${ai ? 'Pot răspunde cu AI' : 'Acum răspund local, fără AI'}</div></div>`;
   const body = h`
     <div class="mentor-hd">${botSvg()}<div class="grow"><b style="font-size:16px">Mentorul tău</b><div class="sm muted mt4">${ai ? 'Răspunsurile vin de la AI, pe baza unui rezumat al datelor tale.' : 'Analizez datele tale cu reguli locale.'}</div></div></div>
-    ${!ai && st.why ? h`<div class="note mt12">${ic('info')}<div class="grow">${st.why.message}${st.why.action === 'account' ? h`<button class="btn xs mt8" data-a="account-open">${ic('userPlus')}Creează cont / Autentifică-te</button>` : st.why.action === 'consent' ? h`<button class="btn xs mt8" data-a="ai-consent-open">${ic('sparkle')}Activează Mentorul AI</button>` : ''}</div></div>` : ''}
+    ${!ai && st.why ? h`<div class="note mt12">${ic('info')}<div class="grow">${st.why.message}${st.why.action === 'account' ? h`<div class="mt8"><button class="btn xs" data-a="account-open">${ic('userPlus')}Creează cont / Autentifică-te</button></div>` : st.why.action === 'consent' ? h`<div class="mt8"><button class="btn xs" data-a="ai-consent-open">${ic('sparkle')}Activează Mentorul AI</button></div>` : ''}</div></div>` : ''}
     ${rec ? h`<div class="rec-card"><h3>${ic('bulb')}Recomandarea mea</h3><p>${rec.text}</p>${S.mentor.lastAnalysis ? h`<button class="btn ghost c-green sm mt12" data-a="mentor-analysis">Vezi analiza completă ${ic('arrowRight')}</button>` : ''}</div>` : ''}
     ${pend.length ? h`<h2 class="h2" id="sug-list"><span class="l">${ic('wand')}Sugestii de misiuni (${pend.length})</span></h2><p class="hint mb8">Nimic nu devine misiune până nu accepți. Poți edita înainte să salvezi.</p>${pend.slice(0, 6).map(sugCard)}${pend.length > 6 ? h`<p class="hint mt8">Mai sunt ${pend.length - 6} sugestii în așteptare.</p>` : ''}` : ''}
     <div class="chips-scroll" role="group" aria-label="Acțiuni rapide">${MENTOR_ACTIONS.map((a) => h`<button class="qchip" data-a="mentor-quick" data-v="${a.id}" ${M.busy ? 'disabled' : ''}>${ic(a.icon)}${a.label}</button>`)}</div>
@@ -6609,7 +6810,10 @@ A['notif-open'] = () => sheet('notif', 'Notificări și confort', () => {
   <h3 class="cap mt16 mb8">Animații</h3>
   <div class="seg" role="group" aria-label="Animații">${[['auto', 'Automat'], ['reduced', 'Redus'], ['full', 'Complet']].map((x) => h`<button aria-pressed="${mo === x[0]}" data-a="set-motion" data-v="${x[0]}">${x[1]}</button>`)}</div>
   <p class="hint mt8">„Automat” urmează setarea telefonului pentru reducerea mișcării. „Redus” oprește confetti, XP-ul plutitor și mișcările decorative.</p>
-  <div class="note mt16">${ic('info')}<div class="grow">Aplicația nu poate trimite notificări când este închisă (nu are notificări push). Memento-urile apar doar când o deschizi.</div></div>`;
+  <h3 class="cap mt16 mb8">Memento zilnic pe telefon</h3>
+  ${Notify.available() ? h`<div class="card flat" style="padding:2px 14px"><div class="tgl"><div class="lt"><b>Memento zilnic</b><small>Cel mult unul pe zi, la ora aleasă. Nu apare dacă ai fost deja activ în ziua respectivă sau într-o zi liberă.</small></div><button class="sw" role="switch" aria-checked="${!!(s.notify && s.notify.on)}" data-a="notify-toggle" aria-label="Memento zilnic"></button></div>
+    ${s.notify && s.notify.on ? h`<div class="field mb8"><label for="ntf-time">Ora</label><input class="inp" id="ntf-time" type="time" value="${s.notify.time}" data-f="ntf.time" data-h="notifyTime"></div>` : ''}</div>`
+  : h`<div class="note">${ic('info')}<div class="grow">Memento-urile pe telefon sunt disponibile în aplicația instalată din App Store. În browser, memento-urile apar doar când deschizi jocul.</div></div>`}`;
 });
 
 /* ===================================================================================
@@ -7252,6 +7456,8 @@ function start(res) {
   if (S.profile.onboarded && (res.repaired || ro.changed || lt !== S.meta.lastTick)) { try { Store.save(S); } catch (e) { console.error(e); } }
   render({ nav: true });
   updateSaveUI();
+  try { processEvents(Eng.drain()); } catch (e) { console.error(e); }
+  try { Notify.plan(S); } catch (e) { /* memento opțional */ }
   if (ro.expired) toast(U.pl(ro.expired, 'misiune a expirat', 'misiuni au expirat') + '. XP-ul câștigat rămâne; le poți reactiva cu un termen nou.', { kind: 'warn', icon: 'hourglass', ms: 6000 });
   cloudBoot();
 }
