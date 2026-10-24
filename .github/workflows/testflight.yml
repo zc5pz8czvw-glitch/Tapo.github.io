@@ -25,7 +25,7 @@ jobs:
           LIFE_RPG_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
           LIFE_RPG_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
         run: |
-          test -n "$LIFE_RPG_SUPABASE_URL" || { echo "Lipsește variabila SUPABASE_URL (Settings → Secrets and variables → Actions → Variables)"; exit 1; }
+          if [ -z "$LIFE_RPG_SUPABASE_URL" ]; then echo "Fără server (SUPABASE_URL lipsește): aplicația se construiește în modul local, fără cont și fără Mentor AI."; fi
           npm run build
       - run: npx cap sync ios
       - name: Cheia App Store Connect API
