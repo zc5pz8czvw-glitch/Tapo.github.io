@@ -1,0 +1,34 @@
+# Publică site-ul (jocul ca aplicație web + politica de confidențialitate, termenii, pagina de suport) pe GitHub Pages.
+# Rulează la fiecare push pe ramura main. Setare unică: Settings → Pages → Source: „GitHub Actions”.
+name: Site (GitHub Pages)
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency: { group: pages, cancel-in-progress: true }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - env:
+          LIFE_RPG_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          LIFE_RPG_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          LIFE_RPG_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+        run: npm run build && node tools/build-site.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: build/site }
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: '${{ steps.d.outputs.page_url }}' }
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4

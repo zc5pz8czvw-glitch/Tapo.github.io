@@ -57,6 +57,10 @@ let page = html.slice(0, a) + '\n' + head + js + html.slice(b);
 
 /* configurația (doar valori publice: URL-ul serverului și cheia publică „anon”, protejată de regulile RLS) */
 const cfg = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+/* valorile publice pot veni și din mediu (CI): LIFE_RPG_SUPABASE_URL, LIFE_RPG_SUPABASE_ANON_KEY, LIFE_RPG_SUPPORT_EMAIL */
+if (process.env.LIFE_RPG_SUPABASE_URL) cfg.supabaseUrl = process.env.LIFE_RPG_SUPABASE_URL;
+if (process.env.LIFE_RPG_SUPABASE_ANON_KEY) cfg.supabaseAnonKey = process.env.LIFE_RPG_SUPABASE_ANON_KEY;
+if (process.env.LIFE_RPG_SUPPORT_EMAIL) cfg.supportEmail = process.env.LIFE_RPG_SUPPORT_EMAIL;
 for (const k of Object.keys(cfg)) if (/secret|service|private/i.test(k)) throw new Error('config: cheia „' + k + '” pare secretă; nu o pune în aplicație');
 if (cfg.supabaseAnonKey) {
   try { const role = JSON.parse(Buffer.from(cfg.supabaseAnonKey.split('.')[1], 'base64url').toString()).role; if (role && role !== 'anon') throw new Error('supabaseAnonKey nu este cheia „anon” (rol: ' + role + '). Nu pune niciodată cheia service_role în aplicație.'); }

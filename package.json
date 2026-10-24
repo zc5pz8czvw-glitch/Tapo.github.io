@@ -2,7 +2,7 @@
   "name": "life-rpg",
   "version": "5.0.0",
   "private": true,
-  "description": "LIFE RPG \u2014 joc de progres personal (RO/EN/RU)",
+  "description": "LIFE RPG — joc de progres personal (RO/EN/RU)",
   "scripts": {
     "build": "node tools/build-app.cjs",
     "stack:up": "supabase/local/dc.sh up -d && node tools/apply-migrations.mjs",
@@ -14,11 +14,20 @@
     "icons": "node tools/render-icons.cjs app/art/icon.svg app/public/icons"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.3",
     "@fontsource/montserrat": "^5.2.8",
     "@supabase/supabase-js": "^2.117.3",
     "acorn": "^8.19.0",
     "acorn-walk": "^8.3.5",
     "pg": "^8.23.1",
     "playwright": "^1.56.1"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "appId": "com.tapo.liferpg",
+  "appName": "LIFE RPG",
+  "webDir": "build/www",
+  "backgroundColor": "#11122a",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#11122a",
+    "allowsLinkPreview": false,
+    "scrollEnabled": true,
+    "preferredContentMode": "mobile"
+  },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 600, "launchAutoHide": true, "backgroundColor": "#11122a", "showSpinner": false },
+    "LocalNotifications": { "presentationOptions": ["banner", "sound", "list"] }
+  }
+}

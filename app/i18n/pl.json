@@ -1,22 +1,86 @@
 {
-"misiune finalizată|misiuni finalizate": ["completed quest|completed quests", "завершённая миссия|завершённые миссии|завершённых миссий"],
-"zi consecutivă|zile consecutive": ["consecutive day|consecutive days", "день подряд|дня подряд|дней подряд"],
-"revizuire zilnică salvată|revizuiri zilnice salvate": ["saved daily review|saved daily reviews", "сохранённый обзор дня|сохранённых обзора дня|сохранённых обзоров дня"],
-"sarcină amânată și apoi finalizată|sarcini amânate și apoi finalizate": ["postponed task completed after all|postponed tasks completed after all", "отложенная задача, выполненная позже|отложенные задачи, выполненные позже|отложенных задач, выполненных позже"],
-"misiune creată de tine și finalizată|misiuni create de tine și finalizate": ["quest you created and completed|quests you created and completed", "миссия, созданная и завершённая тобой|миссии, созданные и завершённые тобой|миссий, созданных и завершённых тобой"],
-"Boss Battle învins|Boss Battle-uri învinse": ["Boss Battle won|Boss Battles won", "выигранная битва с боссом|выигранные битвы с боссом|выигранных битв с боссом"],
-"zi activă|zile active": ["active day|active days", "активный день|активных дня|активных дней"],
-"zi|zile": ["day|days", "день|дня|дней"],
-"misiune|misiuni": ["quest|quests", "миссия|миссии|миссий"],
-"sesiune|sesiuni": ["session|sessions", "сессия|сессии|сессий"],
-"nivel|niveluri": ["level|levels", "уровень|уровня|уровней"],
-"misiune expirată|misiuni expirate": ["expired quest|expired quests", "просроченная миссия|просроченные миссии|просроченных миссий"],
-"dată|ori": ["time|times", "раз|раза|раз"],
-"sugestie|sugestii": ["suggestion|suggestions", "предложение|предложения|предложений"],
-"misiune a expirat|misiuni au expirat": ["quest has expired|quests have expired", "миссия просрочена|миссии просрочены|миссий просрочено"],
-"pas|pași": ["step|steps", "шаг|шага|шагов"],
-"înregistrare|înregistrări": ["entry|entries", "запись|записи|записей"],
-"minut|minute": ["minute|minutes", "минута|минуты|минут"],
-"misiune adăugată|misiuni adăugate": ["quest added|quests added", "миссия добавлена|миссии добавлены|миссий добавлено"],
-"obiectiv|obiective": ["goal|goals", "цель|цели|целей"]
+"misiune finalizată|misiuni finalizate": [
+"completed quest|completed quests",
+"завершённая миссия|завершённые миссии|завершённых миссий"
+],
+"zi consecutivă|zile consecutive": [
+"consecutive day|consecutive days",
+"день подряд|дня подряд|дней подряд"
+],
+"revizuire zilnică salvată|revizuiri zilnice salvate": [
+"saved daily review|saved daily reviews",
+"сохранённый обзор дня|сохранённых обзора дня|сохранённых обзоров дня"
+],
+"sarcină amânată și apoi finalizată|sarcini amânate și apoi finalizate": [
+"postponed task completed after all|postponed tasks completed after all",
+"отложенная задача, выполненная позже|отложенные задачи, выполненные позже|отложенных задач, выполненных позже"
+],
+"misiune creată de tine și finalizată|misiuni create de tine și finalizate": [
+"quest you created and completed|quests you created and completed",
+"миссия, созданная и завершённая тобой|миссии, созданные и завершённые тобой|миссий, созданных и завершённых тобой"
+],
+"Boss Battle învins|Boss Battle-uri învinse": [
+"Boss Battle won|Boss Battles won",
+"выигранная битва с боссом|выигранные битвы с боссом|выигранных битв с боссом"
+],
+"zi activă|zile active": [
+"active day|active days",
+"активный день|активных дня|активных дней"
+],
+"zi|zile": [
+"day|days",
+"день|дня|дней"
+],
+"misiune|misiuni": [
+"quest|quests",
+"миссия|миссии|миссий"
+],
+"sesiune|sesiuni": [
+"session|sessions",
+"сессия|сессии|сессий"
+],
+"nivel|niveluri": [
+"level|levels",
+"уровень|уровня|уровней"
+],
+"misiune expirată|misiuni expirate": [
+"expired quest|expired quests",
+"просроченная миссия|просроченные миссии|просроченных миссий"
+],
+"dată|ori": [
+"time|times",
+"раз|раза|раз"
+],
+"sugestie|sugestii": [
+"suggestion|suggestions",
+"предложение|предложения|предложений"
+],
+"misiune a expirat|misiuni au expirat": [
+"quest has expired|quests have expired",
+"миссия просрочена|миссии просрочены|миссий просрочено"
+],
+"pas|pași": [
+"step|steps",
+"шаг|шага|шагов"
+],
+"înregistrare|înregistrări": [
+"entry|entries",
+"запись|записи|записей"
+],
+"minut|minute": [
+"minute|minutes",
+"минута|минуты|минут"
+],
+"misiune adăugată|misiuni adăugate": [
+"quest added|quests added",
+"миссия добавлена|миссии добавлены|миссий добавлено"
+],
+"obiectiv|obiective": [
+"goal|goals",
+"цель|цели|целей"
+],
+"Scut de serie|Scuturi de serie": [
+"Streak Shield|Streak Shields",
+"Щит серии|щита серии|щитов серии"
+]
 }
