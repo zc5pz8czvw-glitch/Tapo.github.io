@@ -8,3 +8,4 @@ supabase/.temp/
 .DS_Store
 ios/App/Pods/
 ios/App/App/public/
+test-results/

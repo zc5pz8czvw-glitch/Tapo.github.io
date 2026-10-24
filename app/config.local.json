@@ -1,0 +1,10 @@
+{
+  "supabaseUrl": "http://localhost:54321",
+  "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzAwMDAwMDAwLCJleHAiOjIxMDgyMDU5ODF9.sZsRXFClP9VPZm4wRst2U20US-kLMcXIxZYsaORc6cQ",
+  "aiProviderName": "Anthropic (Claude)",
+  "webUrl": "http://localhost:8080/",
+  "privacyUrl": "http://localhost:8080/privacy.html",
+  "termsUrl": "http://localhost:8080/terms.html",
+  "supportUrl": "http://localhost:8080/support.html",
+  "supportEmail": "support@example.com"
+}

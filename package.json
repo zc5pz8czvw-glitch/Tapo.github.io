@@ -7,12 +7,18 @@
     "build": "node tools/build-app.cjs",
     "stack:up": "supabase/local/dc.sh up -d && node tools/apply-migrations.mjs",
     "stack:down": "supabase/local/dc.sh down -v",
-    "test:backend": "node --test --test-concurrency=1 tests/backend/"
+    "test:backend": "node --test --test-concurrency=1 tests/backend/",
+    "build:local": "node tools/build-app.cjs --config app/config.local.json --allow-untranslated",
+    "serve": "node tools/serve.mjs build/www 8080",
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e/",
+    "icons": "node tools/render-icons.cjs app/art/icon.svg app/public/icons"
   },
   "devDependencies": {
+    "@fontsource/montserrat": "^5.2.8",
     "@supabase/supabase-js": "^2.117.3",
     "acorn": "^8.19.0",
     "acorn-walk": "^8.3.5",
-    "pg": "^8.23.1"
+    "pg": "^8.23.1",
+    "playwright": "^1.56.1"
   }
 }
