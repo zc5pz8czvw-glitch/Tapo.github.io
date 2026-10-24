@@ -1,0 +1,10 @@
+{
+  "supabaseUrl": "",
+  "supabaseAnonKey": "",
+  "aiProviderName": "Anthropic (Claude)",
+  "webUrl": "https://zc5pz8czvw-glitch.github.io/Tapo.github.io/life-rpg/web/",
+  "privacyUrl": "https://zc5pz8czvw-glitch.github.io/Tapo.github.io/life-rpg/web/privacy.html",
+  "termsUrl": "https://zc5pz8czvw-glitch.github.io/Tapo.github.io/life-rpg/web/terms.html",
+  "supportUrl": "https://zc5pz8czvw-glitch.github.io/Tapo.github.io/life-rpg/web/support.html",
+  "supportEmail": ""
+}

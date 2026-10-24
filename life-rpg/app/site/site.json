@@ -1,0 +1,9 @@
+{
+  "operatorName": "",
+  "operatorCountry": "",
+  "contactEmail": "",
+  "effectiveDate": "2026-10-24",
+  "aiProvider": "Anthropic PBC (Claude), SUA",
+  "hosting": "Supabase Inc. (servere în UE — regiunea aleasă la crearea proiectului)",
+  "emailProvider": "Resend (trimiterea codurilor pe e-mail)"
+}

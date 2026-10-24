@@ -1,0 +1,73 @@
+# Configurația proiectului Supabase pentru LIFE RPG (folosită de Supabase CLI: `supabase link`, `supabase db push`,
+# `supabase config push`, `supabase functions deploy`). Valorile marcate cu env(...) se citesc din variabile de mediu,
+# ca secretele să nu ajungă în Git.
+project_id = "life-rpg"
+
+[api]
+enabled = true
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+major_version = 17
+
+[auth]
+enabled = true
+# pagina publică a jocului (GitHub Pages) și aplicația iOS (Capacitor)
+site_url = "env(SITE_URL)"
+additional_redirect_urls = ["capacitor://localhost", "https://localhost"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+enable_anonymous_sign_ins = false
+enable_manual_linking = false
+minimum_password_length = 8
+password_requirements = "letters_digits"
+
+[auth.rate_limit]
+email_sent = 60
+token_refresh = 150
+sign_in_sign_ups = 30
+token_verifications = 30
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_password_change = false
+max_frequency = "60s"
+# codurile de 6 cifre din e-mail se introduc în aplicație (fără linkuri care trebuie deschise pe telefon)
+otp_length = 6
+otp_expiry = 3600
+
+[auth.email.template.confirmation]
+subject = "LIFE RPG — cod de confirmare / confirmation code / код подтверждения"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "LIFE RPG — resetarea parolei / password reset / сброс пароля"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "LIFE RPG — cod de autentificare / sign-in code / код входа"
+content_path = "./supabase/templates/magic_link.html"
+
+# Serverul de e-mail propriu (obligatoriu în producție: serverul implicit Supabase trimite doar către echipa proiectului).
+# Exemplu Resend: host smtp.resend.com, port 465, user „resend”, parola = cheia API Resend.
+[auth.email.smtp]
+enabled = true
+host = "env(SMTP_HOST)"
+port = 465
+user = "env(SMTP_USER)"
+pass = "env(SMTP_PASS)"
+admin_email = "env(SMTP_SENDER)"
+sender_name = "LIFE RPG"
+
+[auth.sms]
+enable_signup = false
+
+[functions.mentor]
+enabled = true
+verify_jwt = true
