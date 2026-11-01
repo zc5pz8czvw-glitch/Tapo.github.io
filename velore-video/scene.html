@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VELORÉ brand intro</title>
+<style>
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:300;src:url(node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:400;src:url(node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500;src:url(node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:300;src:url(node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-300-italic.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:400;src:url(node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-italic.woff2) format('woff2')}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:300;src:url(node_modules/@fontsource/montserrat/files/montserrat-latin-300-normal.woff2) format('woff2')}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:400;src:url(node_modules/@fontsource/montserrat/files/montserrat-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:500;src:url(node_modules/@fontsource/montserrat/files/montserrat-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:600;src:url(node_modules/@fontsource/montserrat/files/montserrat-latin-600-normal.woff2) format('woff2')}
+
+:root{--espresso:#2a1d14;--gold:#b08d57;--golddk:#6b4f2a;--cream:#f3e9da}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0b0907}
+canvas{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+.ov{position:absolute;left:0;width:1080px;text-align:center;color:var(--espresso);will-change:opacity,transform,filter}
+.serif{font-family:'Cormorant Garamond',serif}
+.sans{font-family:'Montserrat',sans-serif}
+
+/* scene 1 logo */
+#logo1{top:800px}
+#logo1 .word{font-family:'Cormorant Garamond';font-weight:300;font-size:168px;letter-spacing:.16em;line-height:1;padding-left:.16em}
+#logo1 .word span{display:inline-block}
+#tag1{top:1000px;font-family:'Montserrat';font-weight:400;font-size:25px;letter-spacing:.46em;padding-left:.46em}
+
+/* captions */
+.cap{top:1408px}
+.kick{font-family:'Montserrat';font-weight:500;font-size:27px;letter-spacing:.42em;padding-left:.42em;color:#4a3520;display:flex;align-items:center;justify-content:center;gap:26px}
+.kick i{display:block;width:54px;height:1.5px;background:var(--gold)}
+.head{font-family:'Cormorant Garamond';font-style:italic;font-weight:400;font-size:112px;line-height:1.05;margin-top:20px;letter-spacing:.005em}
+
+/* end card */
+#logo4{top:196px}
+#logo4 .word{font-family:'Cormorant Garamond';font-weight:300;font-size:118px;letter-spacing:.16em;padding-left:.16em;line-height:1}
+#logo4 .tg{font-family:'Montserrat';font-weight:400;font-size:19px;letter-spacing:.46em;padding-left:.46em;margin-top:22px}
+#elev{top:1318px;font-family:'Cormorant Garamond';font-style:italic;font-weight:400;font-size:92px;line-height:1}
+#btn{top:1452px}
+#btn div{display:inline-block;background:var(--espresso);color:var(--cream);font-family:'Montserrat';font-weight:500;font-size:26px;letter-spacing:.38em;padding:26px 52px 26px calc(52px + .38em);border-radius:60px;box-shadow:0 0 0 1.5px rgba(176,141,87,.85) inset, 0 14px 30px rgba(30,20,12,.28)}
+#foot{top:1585px;font-family:'Montserrat';font-weight:500;font-size:20px;letter-spacing:.40em;padding-left:.40em;color:#3d2c1d}
+
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 70% at 50% 48%,rgba(0,0,0,0) 55%,rgba(18,12,8,.42) 100%)}
+#black{position:absolute;inset:0;background:#000;opacity:1}
+</style>
+<script type="importmap">
+{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}
+</script>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div id="vig"></div>
+
+<div id="logo1" class="ov"><div class="word"></div></div>
+<div id="tag1" class="ov">— THREE-DIMENSIONAL ART —</div>
+
+<div id="t2a" class="ov cap"><div class="kick"><i></i>NOT JUST DECOR<i></i></div><div class="head">A statement.</div></div>
+<div id="t2b" class="ov cap"><div class="kick"><i></i>HANDCRAFTED · PREMIUM<i></i></div><div class="head">Made to be seen.</div></div>
+<div id="t3"  class="ov cap"><div class="kick"><i></i>DEPTH · LIGHT · DETAIL<i></i></div><div class="head">Art you can feel.</div></div>
+
+<div id="logo4" class="ov"><div class="word">VELORÉ</div><div class="tg">— THREE-DIMENSIONAL ART —</div></div>
+<div id="elev" class="ov">Elevate your space.</div>
+<div id="btn" class="ov"><div>DM TO ORDER</div></div>
+<div id="foot" class="ov">PREMIUM 3D WALL ART · MOLDOVA</div>
+
+<div id="black"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ---------------- helpers ---------------- */
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=t=>{t=clamp(t);return t*t*(3-2*t)};
+const smoother=t=>{t=clamp(t);return t*t*t*(t*(t*6-15)+10)};
+const easeOutCubic=t=>{t=clamp(t);return 1-Math.pow(1-t,3)};
+const easeInOutSine=t=>{t=clamp(t);return -(Math.cos(Math.PI*t)-1)/2};
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function canvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
+function tex(c,srgb=true){const t=new THREE.CanvasTexture(c);if(srgb)t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t}
+
+await document.fonts.load('300 100px "Cormorant Garamond"');
+await document.fonts.load('500 100px "Cormorant Garamond"');
+await document.fonts.load('italic 400 100px "Cormorant Garamond"');
+await document.fonts.load('500 40px "Montserrat"');
+await document.fonts.load('400 40px "Montserrat"');
+await document.fonts.ready;
+
+/* logo letters */
+const LOGO='VELORÉ';
+document.querySelector('#logo1 .word').innerHTML=[...LOGO].map(ch=>`<span>${ch}</span>`).join('');
+const logoSpans=[...document.querySelectorAll('#logo1 .word span')];
+
+/* ---------------- renderer ---------------- */
+const W=1080,H=1920;
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(1);
+renderer.setSize(W,H,false);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.0;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color('#1a140f');
+const pmrem=new THREE.PMREMGenerator(renderer);
+scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
+scene.environmentIntensity=0.30;
+
+const camera=new THREE.PerspectiveCamera(35,W/H,0.01,50);
+
+/* ---------------- wall ---------------- */
+// wall spans x[-4,4], y[-2.5,3.5]  (512 px / m)
+const WALL={x0:-4,y0:-2.5,w:8,h:6,ppm:400};
+function wallPx(x,y){return[(x-WALL.x0)*WALL.ppm,(WALL.y0+WALL.h-y)*WALL.ppm]}
+function makeWindowLight(){
+  const cw=WALL.w*WALL.ppm,ch=WALL.h*WALL.ppm;
+  const src=canvas(cw,ch),g=src.getContext('2d');
+  g.fillStyle='#000';g.fillRect(0,0,cw,ch);
+  // sunlit window projection: 3 cols x 2 rows of panes, sheared diagonally
+  const ppm=WALL.ppm;
+  const [ox,oy]=wallPx(-1.75,2.55);   // top-left corner of the projection
+  g.save();
+  g.translate(ox,oy);
+  g.transform(1,0.30,0.42,1,0,0);     // shear -> diagonal light
+  const paneW=0.78*ppm,paneH=1.25*ppm,mull=0.075*ppm;
+  g.fillStyle='#fff';
+  for(let r=0;r<2;r++)for(let c=0;c<3;c++){
+    g.fillRect(c*(paneW+mull),r*(paneH+mull),paneW,paneH);
+  }
+  g.restore();
+  const out=canvas(cw,ch),o=out.getContext('2d');
+  o.fillStyle='#000';o.fillRect(0,0,cw,ch);
+  o.filter='blur(46px)';o.globalAlpha=0.55;o.drawImage(src,0,0);
+  o.filter='blur(14px)';o.globalAlpha=0.65;o.drawImage(src,0,0);
+  o.filter='none';o.globalAlpha=1;
+  // soft falloff towards bottom-right (penumbra grows away from window)
+  const gr=o.createLinearGradient(0,0,cw*0.7,ch);
+  gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,0.55)');
+  o.fillStyle=gr;o.globalCompositeOperation='multiply';o.fillRect(0,0,cw,ch);
+  return out;
+}
+function makePlaster(size,seed,strength){
+  const c=canvas(size,size),g=c.getContext('2d'),r=rng(seed);
+  const img=g.createImageData(size,size);
+  // value noise, tileable, 3 octaves
+  const oct=[[8,0.5],[32,0.3],[128,0.2]];
+  const grids=oct.map(([n])=>{const a=new Float32Array(n*n);for(let i=0;i<n*n;i++)a[i]=r();return a});
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    let v=0;
+    oct.forEach(([n,amp],k)=>{
+      const fx=x/size*n,fy=y/size*n,ix=Math.floor(fx),iy=Math.floor(fy),tx=fx-ix,ty=fy-iy;
+      const a=grids[k],q=(i,j)=>a[((j%n+n)%n)*n+((i%n+n)%n)];
+      const sx=tx*tx*(3-2*tx),sy=ty*ty*(3-2*ty);
+      v+=amp*lerp(lerp(q(ix,iy),q(ix+1,iy),sx),lerp(q(ix,iy+1),q(ix+1,iy+1),sx),sy);
+    });
+    const p=(y*size+x)*4,val=Math.round(255*(1-strength+strength*v));
+    img.data[p]=img.data[p+1]=img.data[p+2]=val;img.data[p+3]=255;
+  }
+  g.putImageData(img,0,0);return c;
+}
+const plasterMap=tex(makePlaster(512,7,0.10));plasterMap.wrapS=plasterMap.wrapT=THREE.RepeatWrapping;plasterMap.repeat.set(8*1.2,6*1.2);
+const plasterBump=tex(makePlaster(512,11,1.0),false);plasterBump.wrapS=plasterBump.wrapT=THREE.RepeatWrapping;plasterBump.repeat.set(8*4,6*4);
+const windowTex=tex(makeWindowLight(),false);
+const wallMat=new THREE.MeshStandardMaterial({color:'#a8937c',map:plasterMap,bumpMap:plasterBump,bumpScale:0.6,roughness:0.95,
+  emissive:new THREE.Color('#ffcf9a'),emissiveMap:windowTex,emissiveIntensity:0.46,envMapIntensity:0.5});
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(WALL.w,WALL.h),wallMat);
+wall.position.set(WALL.x0+WALL.w/2,WALL.y0+WALL.h/2,0);
+wall.receiveShadow=true;scene.add(wall);
+
+/* ---------------- lights ---------------- */
+const hemi=new THREE.HemisphereLight('#f3e4d0','#4a3a2c',0.85);scene.add(hemi);
+const key=new THREE.DirectionalLight('#ffe2bf',1.35);
+key.position.set(-2.2,2.8,3.2);key.target.position.set(0,0,0);
+key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+Object.assign(key.shadow.camera,{left:-1.3,right:1.3,top:1.3,bottom:-1.3,near:0.5,far:9});
+key.shadow.bias=-0.0004;key.shadow.normalBias=0.01;key.shadow.radius=6;
+scene.add(key,key.target);
+const fill=new THREE.DirectionalLight('#d9c6b0',0.35);fill.position.set(2.5,0.5,3);scene.add(fill);
+
+/* ---------------- textures for objects ---------------- */
+function goldGrad(g,x0,y0,x1,y1){
+  const gr=g.createLinearGradient(x0,y0,x1,y1);
+  gr.addColorStop(0,'#8a6a34');gr.addColorStop(0.28,'#e3c58a');gr.addColorStop(0.5,'#b48a48');
+  gr.addColorStop(0.72,'#f0d9a3');gr.addColorStop(1,'#8f6c36');return gr;
+}
+function noteTexture(){
+  const w=1248,h=528,c=canvas(w,h),g=c.getContext('2d');
+  const bg=g.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#e6dcc4');bg.addColorStop(1,'#d8ccb0');
+  g.fillStyle=bg;g.fillRect(0,0,w,h);
+  // guilloche
+  g.strokeStyle='rgba(92,70,46,0.20)';g.lineWidth=1.2;
+  for(let k=0;k<26;k++){g.beginPath();for(let x=0;x<=w;x+=4){const y=h/2+Math.sin(x*0.018+k*0.42)*(h*0.36)*Math.cos(x*0.004+k*0.1);x?g.lineTo(x,y):g.moveTo(x,y)}g.stroke()}
+  // frame
+  g.strokeStyle='#5c442c';g.lineWidth=6;g.strokeRect(22,22,w-44,h-44);
+  g.lineWidth=2;g.strokeRect(38,38,w-76,h-76);
+  // medallion with V monogram
+  const cx=232,cy=h/2;
+  g.fillStyle='#efe6d2';g.beginPath();g.arc(cx,cy,162,0,Math.PI*2);g.fill();
+  g.strokeStyle='#6b4f2a';g.lineWidth=5;g.stroke();
+  g.lineWidth=1.5;for(let i=0;i<72;i++){const a=i/72*Math.PI*2;g.beginPath();g.moveTo(cx+Math.cos(a)*150,cy+Math.sin(a)*150);g.lineTo(cx+Math.cos(a)*165,cy+Math.sin(a)*165);g.stroke()}
+  g.fillStyle='#3a2a1c';g.font='500 250px "Cormorant Garamond"';g.textAlign='center';g.textBaseline='middle';g.fillText('V',cx,cy+12);
+  // right side: wordmark + ornament (no denominations)
+  g.fillStyle='#3d2c1d';g.font='500 92px "Cormorant Garamond"';g.fillText('VELORÉ',890,h/2-40);
+  g.font='500 21px "Montserrat"';g.fillText('T H R E E - D I M E N S I O N A L   A R T',890,h/2+40);
+  g.strokeStyle='#6b4f2a';g.lineWidth=2;g.beginPath();g.moveTo(700,h/2+90);g.lineTo(1080,h/2+90);g.stroke();
+  g.fillStyle='rgba(176,141,87,0.85)';g.beginPath();g.arc(1100,110,44,0,Math.PI*2);g.fill();
+  g.fillStyle='#3a2a1c';g.font='500 52px "Cormorant Garamond"';g.fillText('V',1100,114);
+  return tex(c);
+}
+function edgeTexture(vertical){
+  const c=canvas(256,256),g=c.getContext('2d'),r=rng(5);
+  g.fillStyle='#d8cdb3';g.fillRect(0,0,256,256);
+  for(let i=0;i<256;i+=2){g.fillStyle=`rgba(80,62,40,${0.10+r()*0.18})`;vertical?g.fillRect(i,0,1,256):g.fillRect(0,i,256,1)}
+  return tex(c);
+}
+function bandTexture(){
+  const w=256,h=1024,c=canvas(w,h),g=c.getContext('2d');
+  g.fillStyle=goldGrad(g,0,0,w,0);g.fillRect(0,0,w,h);
+  g.strokeStyle='rgba(60,40,15,0.55)';g.lineWidth=3;g.strokeRect(10,-10,w-20,h+20);
+  g.save();g.translate(w/2,h/2);g.rotate(-Math.PI/2);
+  g.fillStyle='#2a1d14';g.font='500 150px "Cormorant Garamond"';g.textAlign='center';g.textBaseline='middle';g.fillText('VELORÉ',0,6);
+  g.restore();return tex(c);
+}
+function staySign(){
+  const w=2048,h=360,c=canvas(w,h),g=c.getContext('2d');
+  g.font='500 250px "Cormorant Garamond"';g.textAlign='center';g.textBaseline='middle';
+  if('letterSpacing' in g)g.letterSpacing='22px';
+  g.fillStyle=goldGrad(g,0,40,0,h-40);g.fillText('STAY HUNGRY.',w/2,h/2+10);
+  return c;
+}
+function plaqueTexture(){
+  const w=1024,h=192,c=canvas(w,h),g=c.getContext('2d');
+  g.fillStyle=goldGrad(g,0,0,w,h);g.fillRect(0,0,w,h);
+  g.strokeStyle='rgba(60,40,15,0.6)';g.lineWidth=4;g.strokeRect(14,14,w-28,h-28);
+  g.fillStyle='rgba(42,29,20,0.92)';g.font='500 92px "Cormorant Garamond"';g.textAlign='center';g.textBaseline='middle';
+  if('letterSpacing' in g)g.letterSpacing='24px';g.fillText('VELORÉ',w/2+12,h/2+6);
+  return tex(c);
+}
+function iconTex(kind){
+  const c=canvas(128,128),g=c.getContext('2d');
+  g.fillStyle='#1b1b1b';g.fillRect(0,0,128,128);
+  g.strokeStyle='#b9b2a6';g.fillStyle='#b9b2a6';g.lineWidth=7;g.lineCap='round';
+  if(kind<2){ // padlock closed/open
+    g.strokeRect(40,62,48,36);g.beginPath();
+    if(kind===0)g.arc(64,62,16,Math.PI,0);else g.arc(64,56,16,Math.PI,-0.2);
+    g.stroke();
+  }else{ // trunk
+    g.beginPath();g.moveTo(30,80);g.lineTo(46,50);g.lineTo(82,50);g.lineTo(98,80);g.closePath();g.stroke();
+  }
+  return tex(c);
+}
+
+/* ---------------- FRAME A : black shadow box ---------------- */
+const FA=new THREE.Group();FA.position.set(-0.33,0,0);scene.add(FA);
+const fw=0.50,fh=0.66,fd=0.075,fb=0.036;   // outer w/h, depth, border
+const iw=fw-2*fb,ih=fh-2*fb;
+function buildFrame(group,mat,depth){
+  const parts=[
+    [fw,fb,depth,0,(fh-fb)/2],[fw,fb,depth,0,-(fh-fb)/2],
+    [fb,fh-2*fb,depth,-(fw-fb)/2,0],[fb,fh-2*fb,depth,(fw-fb)/2,0]];
+  for(const [w,h,d,x,y] of parts){
+    const m=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,3,0.004),mat);
+    m.position.set(x,y,d/2);m.castShadow=true;m.receiveShadow=true;group.add(m);
+  }
+}
+const blackFrameMat=new THREE.MeshPhysicalMaterial({color:'#0e0d0c',roughness:0.42,clearcoat:0.5,clearcoatRoughness:0.25,envMapIntensity:0.9});
+buildFrame(FA,blackFrameMat,fd);
+// gold fillet on inner front edge
+{const gm=new THREE.MeshStandardMaterial({color:'#c9a66b',metalness:1,roughness:0.28,envMapIntensity:1.2});
+ const t=0.004;
+ for(const [w,h,x,y] of [[iw+2*t,t,0,ih/2+t/2],[iw+2*t,t,0,-ih/2-t/2],[t,ih,-iw/2-t/2,0],[t,ih,iw/2+t/2,0]]){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,0.004),gm);m.position.set(x,y,fd-0.002);FA.add(m);}
+}
+// back panel: matte black velvet
+const back=new THREE.Mesh(new THREE.PlaneGeometry(iw,ih),new THREE.MeshStandardMaterial({color:'#17120f',roughness:1,envMapIntensity:0.15}));
+back.position.z=0.006;back.receiveShadow=true;FA.add(back);
+// LED strip (warm) along inner top, plus spotlight down
+const ledMat=new THREE.MeshBasicMaterial({color:'#ffcf8f'});
+const led=new THREE.Mesh(new THREE.BoxGeometry(iw-0.01,0.004,0.006),ledMat);led.position.set(0,ih/2-0.003,fd-0.012);FA.add(led);
+const ledGlowC=canvas(256,256);{const g=ledGlowC.getContext('2d');const gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,'rgba(255,200,130,0.55)');gr.addColorStop(1,'rgba(255,200,130,0)');g.fillStyle=gr;g.fillRect(0,0,256,256)}
+const ledGlow=new THREE.Mesh(new THREE.PlaneGeometry(iw,0.10),new THREE.MeshBasicMaterial({map:tex(ledGlowC),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+ledGlow.position.set(0,ih/2-0.05,0.0075);FA.add(ledGlow);
+const spotA=new THREE.SpotLight('#ffbf7a',1.1,0,Math.PI*0.42,0.9,1.6);
+spotA.position.set(0,ih/2-0.004,fd-0.014);spotA.target.position.set(0,-ih/2,0.0);
+spotA.castShadow=true;spotA.shadow.mapSize.set(1024,1024);spotA.shadow.bias=-0.0006;spotA.shadow.camera.near=0.01;spotA.shadow.radius=4;
+FA.add(spotA,spotA.target);
+
+// "STAY HUNGRY." raised gold letters (stacked layers -> 3D)
+{const sc=staySign();const t=tex(sc);
+ const sw=0.36,sh=sw*sc.height/sc.width;
+ const layers=7;
+ for(let i=0;i<layers;i++){
+   const top=i===layers-1;
+   const m=new THREE.MeshStandardMaterial({map:t,transparent:false,alphaTest:0.45,metalness:top?0.85:0.6,roughness:top?0.32:0.5,
+     color:top?'#ffffff':'#8a6a3a',envMapIntensity:top?1.4:0.7});
+   const p=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),m);
+   p.position.set(0,0.175,0.010+i*0.0012);p.castShadow=true;p.receiveShadow=!top;FA.add(p);
+ }}
+// money bundles
+const noteMap=noteTexture(),edgeH=edgeTexture(false),edgeV=edgeTexture(true),bandMap=bandTexture();
+function bundle(x,y,rot){
+  const bw=0.158,bh=0.068,bd=0.022,g=new THREE.Group();
+  const edgeMatH=new THREE.MeshStandardMaterial({map:edgeH,roughness:0.85});
+  const edgeMatV=new THREE.MeshStandardMaterial({map:edgeV,roughness:0.85});
+  const faceMat=new THREE.MeshStandardMaterial({map:noteMap,roughness:0.75,envMapIntensity:0.4});
+  // box faces order: +x,-x,+y,-y,+z,-z
+  const box=new THREE.Mesh(new THREE.BoxGeometry(bw,bh,bd),[edgeMatH,edgeMatH,edgeMatV,edgeMatV,faceMat,faceMat]);
+  box.castShadow=true;box.receiveShadow=true;g.add(box);
+  // slight top sheet offset for realism
+  const sheet=new THREE.Mesh(new THREE.PlaneGeometry(bw*0.995,bh*0.99),faceMat);sheet.position.z=bd/2+0.0004;sheet.rotation.z=0.006;g.add(sheet);
+  const bandMat=new THREE.MeshStandardMaterial({map:bandMap,metalness:0.55,roughness:0.38,envMapIntensity:1.1});
+  const band=new THREE.Mesh(new THREE.BoxGeometry(0.026,bh+0.0016,bd+0.0024),bandMat);band.position.set(-0.0119,0,0.0002);band.castShadow=true;g.add(band);
+  g.position.set(x,y,0.006+bd/2+0.004);g.rotation.z=rot;FA.add(g);return g;
+}
+bundle(-0.088,0.025,0.0);bundle(0.088,0.025,0.0);
+// car key fob (black gloss) - generic, V monogram
+{const kg=new THREE.Group();
+ const body=new THREE.Mesh(new RoundedBoxGeometry(0.046,0.088,0.017,6,0.0075),
+   new THREE.MeshPhysicalMaterial({color:'#070707',roughness:0.14,clearcoat:1,clearcoatRoughness:0.04,envMapIntensity:1.6}));
+ body.castShadow=true;kg.add(body);
+ const trim=new THREE.Mesh(new RoundedBoxGeometry(0.0475,0.0895,0.0035,6,0.0016),
+   new THREE.MeshStandardMaterial({color:'#d9d4cc',metalness:1,roughness:0.18,envMapIntensity:1.4}));kg.add(trim);
+ [0,1,2].forEach(i=>{
+   const bt=new THREE.Mesh(new THREE.CylinderGeometry(0.0082,0.0082,0.0022,40),
+     [new THREE.MeshStandardMaterial({color:'#151515',roughness:0.6}),new THREE.MeshStandardMaterial({map:iconTex(i),roughness:0.55}),new THREE.MeshStandardMaterial({color:'#151515'})]);
+   bt.rotation.x=Math.PI/2;bt.rotation.y=Math.PI;bt.position.set(0,0.012-i*0.021,0.0088);kg.add(bt);
+ });
+ // monogram disc
+ const mc=canvas(128,128);{const g=mc.getContext('2d');g.fillStyle='#0a0a0a';g.fillRect(0,0,128,128);g.fillStyle='#cbb68f';g.font='500 92px "Cormorant Garamond"';g.textAlign='center';g.textBaseline='middle';g.fillText('V',64,70)}
+ const mono=new THREE.Mesh(new THREE.CircleGeometry(0.0062,40),new THREE.MeshStandardMaterial({map:tex(mc),metalness:0.6,roughness:0.3}));
+ mono.position.set(0,0.033,0.0087);kg.add(mono);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(0.0125,0.0016,16,64),new THREE.MeshStandardMaterial({color:'#c9a66b',metalness:1,roughness:0.22,envMapIntensity:1.4}));
+ ring.position.set(0,0.056,0.0);ring.castShadow=true;kg.add(ring);
+ kg.position.set(0,-0.150,0.006+0.0085+0.006);kg.rotation.z=-0.18;FA.add(kg);
+}
+// brass plaque
+{const pl=new THREE.Mesh(new THREE.BoxGeometry(0.11,0.021,0.002),[0,0,0,0,0,0].map((_,i)=>i===4?new THREE.MeshStandardMaterial({map:plaqueTexture(),metalness:0.9,roughness:0.3,envMapIntensity:1.2}):new THREE.MeshStandardMaterial({color:'#9c7a45',metalness:1,roughness:0.35})));
+ pl.position.set(0,-0.262,0.008);pl.castShadow=true;FA.add(pl);}
+
+/* ---------------- FRAME B : layered mountain poster ---------------- */
+const FB=new THREE.Group();FB.position.set(0.33,0,0);scene.add(FB);
+const fdB=0.085;
+const champMat=new THREE.MeshStandardMaterial({color:'#d5bc90',metalness:1,roughness:0.30,envMapIntensity:1.15});
+buildFrame(FB,champMat,fdB);
+// sky backplate (backlit -> unlit)
+{const c=canvas(512,1024),g=c.getContext('2d');const gr=g.createLinearGradient(0,0,0,1024);
+ gr.addColorStop(0,'#b9a084');gr.addColorStop(0.45,'#d2b48c');gr.addColorStop(0.7,'#d9a96d');gr.addColorStop(1,'#bb8b56');
+ g.fillStyle=gr;g.fillRect(0,0,512,1024);
+ const sky=new THREE.Mesh(new THREE.PlaneGeometry(iw,ih),new THREE.MeshBasicMaterial({map:tex(c)}));sky.position.z=0.004;FB.add(sky);}
+// sun + halo
+{const sun=new THREE.Mesh(new THREE.CircleGeometry(0.058,96),new THREE.MeshBasicMaterial({color:'#e7b56a'}));sun.position.set(0.035,0.115,0.0055);FB.add(sun);
+ const hc=canvas(512,512),g=hc.getContext('2d');const gr=g.createRadialGradient(256,256,40,256,256,256);
+ gr.addColorStop(0,'rgba(255,200,130,0.30)');gr.addColorStop(0.5,'rgba(255,190,120,0.08)');gr.addColorStop(1,'rgba(255,200,130,0)');g.fillStyle=gr;g.fillRect(0,0,512,512);
+ const halo=new THREE.Mesh(new THREE.PlaneGeometry(0.22,0.22),new THREE.MeshBasicMaterial({map:tex(hc),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+ halo.position.set(0.035,0.115,0.0058);FB.add(halo);}
+// 5 mountain layers
+const layerCols=['#cfb08a','#b18c66','#8a6a4e','#5c4331','#2f2118'];
+const mtn=[];
+for(let i=0;i<5;i++){
+  const r=rng(100+i*17);
+  const base=0.075-i*0.072, amp=0.085-i*0.008;
+  const nv=[];for(let q=0;q<64;q++)nv.push(r());
+  const vn=x=>{const i=Math.floor(x),f=x-i,u=f*f*(3-2*f);return lerp(nv[((i%64)+64)%64],nv[(((i+1)%64)+64)%64],u)*2-1};
+  const ridgeN=x=>{let v=0,a=0.6,fr=1;for(let o=0;o<4;o++){v+=a*(1-Math.abs(vn(x*fr+o*7.3)));a*=0.45;fr*=2.1}return v};
+  const sh=new THREE.Shape();const x0=-iw/2-0.012,x1=iw/2+0.012;
+  sh.moveTo(x0,-ih/2-0.012);
+  for(let s=0;s<=320;s++){
+    const x=lerp(x0,x1,s/320);
+    const y=base+amp*1.25*(ridgeN((x+1)*(9+i*2.5))-0.55);
+    sh.lineTo(x,y);
+  }
+  sh.lineTo(x1,-ih/2-0.012);sh.closePath();
+  const geo=new THREE.ExtrudeGeometry(sh,{depth:0.0045,bevelEnabled:false,curveSegments:1});
+  const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:layerCols[i],roughness:0.88,envMapIntensity:0.35}));
+  m.position.z=0.012+i*0.0135;m.castShadow=true;m.receiveShadow=true;FB.add(m);mtn.push(m);
+}
+const ledB=new THREE.Mesh(new THREE.BoxGeometry(iw-0.01,0.004,0.006),ledMat);ledB.position.set(0,ih/2-0.003,fdB-0.010);FB.add(ledB);
+const spotB=new THREE.SpotLight('#ffc98c',0.55,0,Math.PI*0.42,0.95,1.6);
+spotB.position.set(0,ih/2-0.004,fdB-0.012);spotB.target.position.set(0,-ih/2,0.02);
+spotB.castShadow=true;spotB.shadow.mapSize.set(1024,1024);spotB.shadow.bias=-0.0006;spotB.shadow.camera.near=0.01;spotB.shadow.radius=4;
+FB.add(spotB,spotB.target);
+
+/* ---------------- timeline ---------------- */
+const $=s=>document.querySelector(s);
+const el={logo1:$('#logo1'),tag1:$('#tag1'),t2a:$('#t2a'),t2b:$('#t2b'),t3:$('#t3'),logo4:$('#logo4'),elev:$('#elev'),btn:$('#btn'),foot:$('#foot'),black:$('#black')};
+
+function caption(node,t,a,b){ // in at a, out at b
+  const pin=smoother((t-a)/0.7), pout=smoother((t-(b-0.45))/0.45);
+  const op=pin*(1-pout);
+  node.style.opacity=op.toFixed(3);
+  const k=node.querySelector('.kick'),h=node.querySelector('.head');
+  if(k){k.style.letterSpacing=(0.62-0.20*easeOutCubic((t-a)/1.4)).toFixed(3)+'em';}
+  if(h){const ph=smoother((t-a-0.15)/0.75);h.style.opacity=ph.toFixed(3);h.style.transform=`translateY(${((1-ph)*26-pout*10).toFixed(2)}px)`;h.style.filter=`blur(${((1-ph)*9+pout*4).toFixed(2)}px)`;}
+  node.style.display=op<=0.001?'none':'block';
+}
+function simpleFade(node,t,a,dur,dy=18,blur=8){
+  const p=smoother((t-a)/dur);
+  node.style.opacity=p.toFixed(3);node.style.transform=`translateY(${((1-p)*dy).toFixed(2)}px)`;node.style.filter=`blur(${((1-p)*blur).toFixed(2)}px)`;
+  node.style.display=p<=0.001?'none':'block';
+}
+// black dips: [center, half-width]
+const DIPS=[[4.0,0.42],[10.0,0.42],[14.5,0.42]];
+function blackAt(t){
+  let b=1-smooth(t/0.6);                       // fade in from black
+  for(const [c,hw] of DIPS){const d=Math.abs(t-c);b=Math.max(b,1-smooth((d-0.06)/(hw-0.06)));}
+  return clamp(b);
+}
+
+const tmpV=new THREE.Vector3();
+function orbit(target,az,el,r,dy){ // az: + to the right, el: + up (radians)
+  return new THREE.Vector3(target.x+r*Math.sin(az)*Math.cos(el),target.y+dy+r*Math.sin(el),target.z+r*Math.cos(az)*Math.cos(el));
+}
+function cameraAt(t){
+  const D=Math.PI/180;
+  if(t<4.3){ // wall + logo: slow push in
+    const p=easeInOutSine(t/4.3);
+    const look=new THREE.Vector3(0.05,1.30,0);
+    return {pos:new THREE.Vector3(lerp(0.12,0.05,p),lerp(1.34,1.30,p),lerp(2.45,2.15,p)),look,fov:35,A:false,B:false};
+  }
+  if(t<10.0){ // shadow box: side close -> front pull back
+    const p=smoother((t-3.7)/3.3);
+    const tg=new THREE.Vector3(FA.position.x,0,0.03);
+    const drift=smooth((t-6.6)/3.4);
+    const az=(lerp(48,0,p)-1.5*drift)*D, el=lerp(1,0,p)*D, r=lerp(0.60,1.95,p)+0.12*drift, dy=lerp(-0.125,-0.105,p);
+    const pos=orbit(tg,az,el,r,dy);
+    const look=new THREE.Vector3(tg.x+lerp(0.01,0,p),tg.y+dy,tg.z);
+    return {pos,look,fov:lerp(32,35,p),A:true,B:false};
+  }
+  if(t<14.5){ // poster: lateral parallax
+    const p=easeInOutSine((t-9.7)/4.8);
+    const tg=new THREE.Vector3(FB.position.x,0,0.04);
+    const az=lerp(-24,12,p)*D, el=lerp(6,-2,p)*D, r=lerp(1.80,2.05,p), dy=lerp(-0.10,-0.115,p);
+    return {pos:orbit(tg,az,el,r,dy),look:new THREE.Vector3(tg.x,tg.y+dy,tg.z),fov:35,A:false,B:true};
+  }
+  // gallery pull back
+  const p=smoother((t-14.2)/4.8);
+  const tg=new THREE.Vector3(0,0,0.03);
+  const az=lerp(5,0,p)*D, r=lerp(2.75,3.85,p), dy=lerp(-0.02,0.0,p);
+  return {pos:orbit(tg,az,0,r,dy),look:new THREE.Vector3(0,dy,0.03),fov:35,A:true,B:true};
+}
+
+function renderFrame(t){
+  const cam=cameraAt(t);
+  camera.fov=cam.fov;camera.updateProjectionMatrix();
+  camera.position.copy(cam.pos);camera.lookAt(cam.look);
+  FA.visible=cam.A;FB.visible=cam.B;
+  // slow drift of window light
+  windowTex.offset.set(-t*0.0016,t*0.0009);
+  // subtle LED "breathing" (very slight, premium)
+  spotA.intensity=1.1*(0.97+0.03*Math.sin(t*1.3));
+
+  // --- overlays ---
+  // scene 1 logo
+  if(t<4.4){
+    el.logo1.style.display='block';
+    const out=smooth((t-3.35)/0.55);
+    logoSpans.forEach((s,i)=>{
+      const p=smoother((t-0.45-i*0.20)/0.95);
+      s.style.opacity=(p*(1-out)).toFixed(3);
+      s.style.filter=`blur(${((1-p)*22+out*6).toFixed(2)}px)`;
+      s.style.transform=`translateY(${((1-p)*10).toFixed(2)}px)`;
+    });
+    const sc=lerp(1.0,1.045,easeInOutSine(t/4.3));
+    el.logo1.style.transform=`scale(${sc.toFixed(4)})`;
+    const tp=smoother((t-2.05)/0.9);
+    el.tag1.style.display='block';
+    el.tag1.style.opacity=(tp*(1-out)).toFixed(3);
+    el.tag1.style.letterSpacing=(0.70-0.24*easeOutCubic((t-2.05)/1.4)).toFixed(3)+'em';
+    el.tag1.style.transform=`scale(${sc.toFixed(4)})`;
+  }else{el.logo1.style.display='none';el.tag1.style.display='none';}
+
+  caption(el.t2a,t,6.15,8.05);
+  caption(el.t2b,t,7.95,9.95);
+  caption(el.t3,t,10.75,14.35);
+
+  if(t>14.6){
+    simpleFade(el.logo4,t,15.0,1.1,-14,10);
+    simpleFade(el.elev,t,16.0,1.0,20,8);
+    simpleFade(el.btn,t,16.6,0.9,16,6);
+    simpleFade(el.foot,t,17.1,0.9,10,4);
+  }else{for(const k of ['logo4','elev','btn','foot'])el[k].style.display='none';}
+
+  el.black.style.opacity=blackAt(t).toFixed(3);
+  renderer.render(scene,camera);
+}
+window.renderFrame=renderFrame;
+window.frameBounds=function(t){
+  const cam=cameraAt(t);camera.fov=cam.fov;camera.updateProjectionMatrix();camera.position.copy(cam.pos);camera.lookAt(cam.look);camera.updateMatrixWorld();
+  const res={};
+  for(const [name,G,vis,d] of [['A',FA,cam.A,fd],['B',FB,cam.B,fdB]]){
+    if(!vis)continue;let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+    for(const sx of [-1,1])for(const sy of [-1,1])for(const z of [0,d]){
+      const v=new THREE.Vector3(G.position.x+sx*fw/2,G.position.y+sy*fh/2,z).project(camera);
+      const px=(v.x+1)/2*W,py=(1-v.y)/2*H;x0=Math.min(x0,px);x1=Math.max(x1,px);y0=Math.min(y0,py);y1=Math.max(y1,py);}
+    res[name]=[Math.round(x0),Math.round(y0),Math.round(x1),Math.round(y1)];
+  }
+  return res;
+};
+renderFrame(0);
+window.__ready=true;
+</script>
+</body>
+</html>
