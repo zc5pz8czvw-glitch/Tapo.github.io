@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zc5pz8czvw-glitch.github.io/Tapo.github.io/sitemap.xml
